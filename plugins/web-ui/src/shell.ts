@@ -252,7 +252,7 @@ function impersonationBanner(by: string) {
 function devBanner(user: string) {
   return html`
     <div class="top-banner dev" role="status">
-      <span><b>Mode dev</b> — tanpa identity provider, masuk sebagai ${user}</span>
+      <span><b>Mode dev</b>, tanpa identity provider, masuk sebagai ${user}</span>
       <button class="top-banner-action" type="button" @click=${signOut}>Keluar</button>
     </div>
   `;

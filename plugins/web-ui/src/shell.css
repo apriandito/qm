@@ -10,7 +10,6 @@
   --radius-lg: 16px;
   --chat-pad: 22px;
   --brand-accent: #5a4bff;
-  --dev-accent: #8a5a00;
   --brand-mark: "A";
 
   --font-sans:
@@ -2552,9 +2551,6 @@ body.resizing-sidebar {
   font-size: 13px;
   font-weight: 500;
 }
-.top-banner.dev {
-  background: var(--dev-accent);
-}
 .top-banner b {
   font-weight: 700;
 }
@@ -3985,7 +3981,7 @@ body.resizing-sidebar {
   margin-left: auto;
   padding: 2px 6px;
   border-radius: 4px;
-  background: var(--dev-accent);
+  background: var(--brand-accent);
   color: #fff;
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: 10px;
