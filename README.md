@@ -6,7 +6,7 @@ Agent Inovasi mengerjakan tugas nyata: memperbaiki bug dan membuka PR, menjawab 
 dokumen internal, serta menjalankan pekerjaan rutin secara otomatis. Kamu memberi
 instruksi lewat chat, dan agent yang mengerjakannya.
 
-![Tampilan chat Agent Inovasi: sidebar berisi Proyek, Chat, File, Cron, Keychain, Aplikasi, Memory, dan Skills, dengan kolom chat di sebelah kanan](./docs/screenshots/web-ui-hero.png)
+![Tampilan chat Agent Inovasi dengan menu di kiri dan kolom chat di kanan](./docs/screenshots/web-ui-hero.png)
 
 ## Daftar isi
 
@@ -22,29 +22,29 @@ instruksi lewat chat, dan agent yang mengerjakannya.
 
 ## Apa itu Agent Inovasi
 
-Agent Inovasi adalah agent yang bekerja untuk **tim**. Setiap orang dan setiap ruang
-punya workspace terisolasi sendiri (memory, file, keychain, permission, cron, web app,
-dan sandbox durable), dan tetap bisa berkolaborasi di channel, group, dan project. Semua
-aktivitas tercatat untuk audit.
+Agent Inovasi adalah agent yang bekerja untuk **tim**. Setiap orang dan setiap tim punya
+ruang kerja sendiri yang terpisah (file, ingatan, kunci akses, izin, jadwal otomatis, dan
+aplikasi), tetapi tetap bisa berkolaborasi di channel, group, dan project. Semua aktivitas
+tercatat untuk audit.
 
-Agent Inovasi bersifat terbuka: kamu memilih sendiri harness dan model yang dipakai. Pi,
-OpenCode, Codex, dan Claude Code menggerakkan core yang sama, sehingga kamu bebas memilih
-model, termasuk **open model** seperti DeepSeek.
+Agent Inovasi bersifat terbuka: kamu bebas memilih sendiri model AI yang dipakai, termasuk
+**open model** seperti DeepSeek. Mesin yang menjalankan agent pun bisa dipilih (Pi,
+OpenCode, Codex, atau Claude Code), dan semuanya memakai sistem yang sama di balik layar.
 
 Yang bisa dikerjakan:
 
-- **Mengerjakan kode**: bekerja langsung di repository yang ada, menjalankan test, membuka PR, memonitor CI, membaca log.
-- **Menjawab dari dokumen internal**: notes, email, dokumen, database, dan web sekaligus, lengkap dengan sumber.
-- **Otomasi rutin**: cron & watch yang berjalan tanpa perlu ditunggu (triage inbox, laporan terjadwal).
+- **Mengerjakan kode**: bekerja langsung di repository yang ada, menjalankan test, membuka PR, memantau CI, membaca log.
+- **Menjawab dari dokumen internal**: catatan, email, dokumen, database, dan web sekaligus, lengkap dengan sumbernya.
+- **Otomasi rutin**: tugas terjadwal yang berjalan otomatis tanpa perlu ditunggu, misalnya merapikan inbox atau membuat laporan berkala.
 - **Membangun & menerbitkan aplikasi internal** ke orang yang tepat.
-- **Mengingat & belajar**: memory berskop, ditambah skills (prosedur yang bisa dipakai ulang dan dibagikan).
+- **Mengingat & belajar**: ingatan per ruang kerja, ditambah skills (langkah kerja yang bisa dipakai ulang dan dibagikan).
 
 ## Panduan cepat: menjalankan di mesin sendiri
 
-Coba Agent Inovasi di mesin sendiri. Chat UI, admin, model (DeepSeek), Postgres, dan
-sandbox agent sudah terhubung.
+Coba Agent Inovasi di mesin sendiri. Tampilan chat, panel admin, model (DeepSeek), database
+(Postgres), dan komputer agent semuanya sudah terhubung.
 
-**Yang perlu disiapkan:** Node ≥ 24.15, Docker, dan sebuah DeepSeek API key.
+**Yang perlu disiapkan:** Node ≥ 24.15, Docker, dan DeepSeek API key.
 
 **Langkahnya:**
 
@@ -53,58 +53,59 @@ npm install
 npm run quickstart
 ```
 
-Perintah ini akan memeriksa kebutuhan sistem, menanyakan DeepSeek API key, menyiapkan
-Postgres dan sandbox, lalu menjalankan core beserta web UI. Setelah selesai, buka alamat
-yang ditampilkan di terminal (default `http://localhost:8096`).
+Perintah ini memeriksa kebutuhan sistem, menanyakan DeepSeek API key, menyiapkan database
+dan komputer agent, lalu menjalankan aplikasinya. Setelah selesai, buka alamat yang
+ditampilkan di terminal (default `http://localhost:8096`).
 
 Detail lengkap dan opsi lain ada di [`QUICKSTART.md`](./QUICKSTART.md).
 
 ### Masuk pertama kali
 
-Saat identity provider belum dikonfigurasi, instance memakai cookie lokal (mode dev).
-Masukkan alamat email kamu sebagai principal, lalu klik **Lanjut**.
+Kalau belum ada sistem login yang dipasang, Agent Inovasi memakai login lokal sederhana
+(mode dev). Masukkan alamat email kamu, lalu klik **Lanjut**.
 
-![Halaman masuk Agent Inovasi dalam mode dev: kolom Principal dan tombol Lanjut](./docs/screenshots/masuk.png)
+![Halaman masuk Agent Inovasi dalam mode dev: kolom email dan tombol Lanjut](./docs/screenshots/masuk.png)
 
 ## Mengenal tampilan
 
-Menu utama ada di sidebar kiri (**Jelajah**). Berikut fungsi tiap bagian.
+Menu utama ada di bilah kiri (**Jelajah**). Berikut fungsi tiap bagian.
 
 ### Chat
 
-Tempat kamu memberi instruksi, persis seperti tampilan di bagian atas README. Ketik
-permintaan di kolom **Tanya apa saja**, lalu agent mengerjakannya. Model dan harness bisa
-dipilih di kanan bawah kolom chat. Setiap percakapan tersimpan di daftar session, dan bisa
-dibagikan ke project agar tim ikut melihat.
+Tempat kamu memberi instruksi ke agent. Ketik permintaan di kolom **Tanya apa saja**, lalu
+agent mengerjakannya. Model AI yang dipakai bisa diganti di kanan bawah kolom chat. Setiap
+percakapan tersimpan otomatis, dan bisa dibagikan ke project agar tim ikut melihat.
 
 ### File
 
 Semua file yang kamu upload, yang dibuat agent, atau yang dibagikan ke kamu ada di sini.
-Kamu bisa menyaring berdasarkan kepemilikan dan tipe, atau meminta agent membuat file baru.
+Kamu bisa menyaringnya berdasarkan pemilik dan tipe, atau meminta agent membuat file baru.
 
-![Halaman File Agent Inovasi dengan area upload dan filter kepemilikan serta tipe](./docs/screenshots/files.png)
+![Halaman File Agent Inovasi dengan area upload dan filter pemilik serta tipe](./docs/screenshots/files.png)
 
 ### Cron
 
-Untuk pekerjaan yang berjalan otomatis dan terjadwal, misalnya triage inbox tiap pagi
-atau laporan mingguan. Cron tetap berjalan meski tidak ada yang menunggu.
+Untuk pekerjaan yang berjalan otomatis dan terjadwal, misalnya merapikan inbox tiap pagi
+atau membuat laporan mingguan. Tugas ini tetap berjalan meski tidak ada yang menunggu.
 
 ![Halaman Cron Agent Inovasi dengan tombol Cron baru](./docs/screenshots/cron.png)
 
 ### Skills
 
-Skill adalah prosedur yang bisa dipakai ulang dan dibagikan. Skill dimiliki oleh scope,
-dibagikan lewat grant, dan bisa dipromosikan ke seluruh organisasi. Instance ini sudah
-membawa sejumlah skill bawaan (misalnya `/browse`, `/cloud-cli`, `/connect-apps`).
+Skill adalah langkah kerja siap pakai yang bisa dipakai ulang dan dibagikan. Skill dimiliki
+tiap ruang kerja, bisa dibagikan ke orang lain, dan bisa dijadikan standar untuk seluruh
+organisasi. Agent Inovasi sudah membawa sejumlah skill bawaan (misalnya `/browse`,
+`/cloud-cli`, `/connect-apps`).
 
 ![Halaman Skills Agent Inovasi menampilkan daftar skill bawaan](./docs/screenshots/skills.png)
 
 ### Memory
 
-Fakta yang dibawa agent ke setiap percakapan kamu. Kamu bisa mengeditnya langsung
-seperti notebook, atau berpindah ke tampilan fakta untuk mencari dan menghapus satu per satu.
+Fakta yang diingat agent dan dibawa ke setiap percakapan kamu. Kamu bisa mengeditnya
+langsung seperti buku catatan, atau membuka tampilan fakta untuk mencari dan menghapus satu
+per satu.
 
-![Halaman Memory Agent Inovasi dengan editor notebook dan tombol Simpan perubahan](./docs/screenshots/memory.png)
+![Halaman Memory Agent Inovasi dengan editor catatan dan tombol Simpan perubahan](./docs/screenshots/memory.png)
 
 ### Aplikasi
 
@@ -118,24 +119,24 @@ Klik **Deploy pakai Agent** untuk memulai.
 Alurnya sederhana: **buka Chat, tulis permintaan, agent mengerjakan**. Beberapa contoh
 permintaan yang bisa langsung kamu coba:
 
-- "Clone repository ini, jalankan test-nya, lalu perbaiki test yang gagal dan buka PR."
+- "Clone repository ini, jalankan test-nya, lalu perbaiki yang gagal dan buka PR."
 - "Rangkum semua email minggu ini dari klien, kelompokkan per topik."
-- "Buatkan cron yang mengirim laporan penjualan tiap Senin jam 8 pagi."
+- "Buatkan jadwal otomatis yang mengirim laporan penjualan tiap Senin jam 8 pagi."
 - "Buat aplikasi internal sederhana untuk mencatat absensi, lalu deploy ke tim HR."
 
 Agent akan menjelaskan langkah yang diambil, meminta persetujuan bila diperlukan (sesuai
-security posture), dan menyimpan hasilnya di File, Memory, atau Aplikasi.
+tingkat keamanan yang dipilih), lalu menyimpan hasilnya di File, Memory, atau Aplikasi.
 
 ## Deploy untuk organisasi
 
-Untuk menjalankan Agent Inovasi bagi satu organisasi, CLI menyiapkan deployment ke
-**Docker**, **Fly.io**, atau **AWS**:
+Untuk menjalankan Agent Inovasi bagi satu organisasi, tersedia CLI yang menyiapkan
+deployment ke **Docker**, **Fly.io**, atau **AWS**:
 
 ```bash
 node cli/bin/qm.ts init . --org <slug> --target <docker|fly|aws>
 ```
 
-Setiap deployment berjalan di akun cloud milik operator. Untuk memakai DeepSeek, set
+Setiap deployment berjalan di akun cloud milik kamu sendiri. Untuk memakai DeepSeek, set
 `MODEL_PROVIDER=deepseek` dan `DEEPSEEK_API_KEY`. Detail lengkap ada di
 [`deployment.md`](./deployment.md) dan [`cli/README.md`](./cli/README.md).
 
@@ -145,22 +146,23 @@ Setiap deployment berjalan di akun cloud milik operator. Untuk memakai DeepSeek,
 npm run coding-check
 ```
 
-Perintah ini memvalidasi bahwa harness dapat melayani model yang dipilih, sandbox punya
-dev tools (git/node/python), dan tool `execute` sudah terhubung, tanpa perlu API key.
+Perintah ini memeriksa bahwa mesin agent bisa memakai model yang dipilih, sandbox punya
+alat pengembang (git/node/python), dan agent bisa menjalankan perintah, tanpa perlu API
+key.
 
 ## Keamanan
 
-Agent bertindak **sebagai** orang yang diwakilinya, dengan kredensial dan izin mereka,
-dan semuanya teraudit. Organisasi memilih satu security posture yang hanya bisa diperketat
-oleh scope yang lebih sempit:
+Agent bertindak atas nama orang yang diwakilinya, memakai kredensial dan izin mereka, dan
+semua tindakannya tercatat. Organisasi memilih satu tingkat keamanan, yang bisa diperketat
+oleh tiap ruang kerja:
 
-- **Strict**: tiap tool call menunggu persetujuan manusia.
-- **Auto** (default): classifier menyaring data eksternal berlabel provenance sebelum sampai ke model.
+- **Strict**: setiap tindakan agent menunggu persetujuan manusia.
+- **Auto** (default): sistem otomatis menyaring data dari sumber luar sebelum sampai ke model AI.
 - **Dangerous**: tanpa penyaringan, tanpa jeda.
 
-Command policy (aturan approval dan larangan keras seperti `rm -rf` atau SQL destruktif)
-berlaku di semua posture. Detail model ancaman, asumsi operator, dan batasan yang
-diketahui ada di [`SECURITY.md`](./SECURITY.md).
+Aturan perintah (persetujuan dan larangan keras seperti `rm -rf` atau perintah SQL yang
+merusak) berlaku di semua tingkat. Rincian model ancaman dan batasan yang diketahui ada di
+[`SECURITY.md`](./SECURITY.md).
 
 ## Cara kerja di balik layar
 
@@ -175,12 +177,10 @@ Web, admin, dan Slack hanyalah pintu masuk ke pusat yang sama, jadi identitas da
 pengaturan kamu tetap konsisten di mana pun kamu mengaksesnya.
 
 Komputer agent (sandbox) sudah berisi alat pengembang seperti git, Node, dan Python,
-sehingga agent bisa langsung menyalin kode, mengubah, menguji, lalu menyimpannya. Kamu
-juga bebas memilih model dan harness (mesin yang menjalankan agent) tanpa mengubah bagian
-lain.
+sehingga agent bisa langsung menyalin kode, mengubah, menguji, lalu menyimpannya. Kamu juga
+bebas memilih model dan mesin yang menjalankan agent tanpa mengubah bagian lain.
 
-Secara teknis, semuanya berjalan di Node (TypeScript), jadi mudah dijalankan dan
-di-deploy.
+Secara teknis, semuanya berjalan di Node (TypeScript), jadi mudah dijalankan dan di-deploy.
 
 ## Lisensi
 
