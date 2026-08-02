@@ -83,7 +83,7 @@ Semuanya berjalan dengan nilai default. Ubah lewat environment variable bila per
 - **Build image sandbox gagal** — chat UI tetap terbuka, tetapi agent belum bisa
   menjalankan perintah sampai `npm run sandbox:local:build` berhasil (butuh Docker dan jaringan).
 
-## Apa ini (dan apa yang bukan)
+## Batasan setup lokal
 
 Ini adalah setup satu mesin untuk satu operator, untuk mencoba dan self-host Agent
 Inovasi. Setup ini sengaja melewati sign-in portal produksi dan TLS, yang sekaligus

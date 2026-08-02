@@ -2,9 +2,9 @@
 
 Coding & working agent untuk tim Indonesia — di web dan (opsional) di Slack.
 
-Agent Inovasi bukan sekadar chatbot. Ia benar-benar mengerjakan tugas: memperbaiki
-bug dan membuka PR, menjawab dari dokumen internal, serta menjalankan pekerjaan rutin
-secara otomatis. Kamu cukup memberi instruksi lewat chat, sisanya dikerjakan agent.
+Agent Inovasi mengerjakan tugas nyata: memperbaiki bug dan membuka PR, menjawab dari
+dokumen internal, serta menjalankan pekerjaan rutin secara otomatis. Kamu memberi
+instruksi lewat chat, dan agent yang mengerjakannya.
 
 ![Tampilan chat Agent Inovasi: sidebar berisi Proyek, Chat, File, Cron, Keychain, Aplikasi, Memory, dan Skills, dengan kolom chat di sebelah kanan](./docs/screenshots/web-ui-hero.png)
 
@@ -24,12 +24,12 @@ secara otomatis. Kamu cukup memberi instruksi lewat chat, sisanya dikerjakan age
 
 Agent Inovasi adalah agent yang bekerja untuk **tim**. Setiap orang dan setiap ruang
 punya workspace terisolasi sendiri — memory, file, keychain, permission, cron, web app,
-dan sandbox durable — tetapi tetap bisa berkolaborasi di channel, group, dan project.
-**Setiap langkah teraudit.**
+dan sandbox durable — dan tetap bisa berkolaborasi di channel, group, dan project. Semua
+aktivitas tercatat untuk audit.
 
-Dibangun terbuka: kamu memilih sendiri harness dan model yang dipakai. Pi, OpenCode,
-Codex, dan Claude Code menggerakkan core yang sama, jadi tidak terkunci ke satu vendor —
-dan bisa berjalan di atas **open model** seperti DeepSeek.
+Agent Inovasi bersifat terbuka: kamu memilih sendiri harness dan model yang dipakai. Pi,
+OpenCode, Codex, dan Claude Code menggerakkan core yang sama, sehingga kamu bebas memilih
+model — termasuk **open model** seperti DeepSeek.
 
 Yang bisa dikerjakan:
 
@@ -41,8 +41,8 @@ Yang bisa dikerjakan:
 
 ## Panduan cepat: menjalankan di mesin sendiri
 
-Cara tercepat mencoba Agent Inovasi secara lokal — chat UI, admin, model (DeepSeek),
-Postgres, dan sandbox agent langsung terhubung.
+Untuk mencoba Agent Inovasi di mesin sendiri — chat UI, admin, model (DeepSeek),
+Postgres, dan sandbox agent sudah terhubung.
 
 **Yang perlu disiapkan:** Node ≥ 24.15, Docker, dan sebuah DeepSeek API key.
 
