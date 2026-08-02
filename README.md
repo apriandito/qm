@@ -1,47 +1,41 @@
-# qm
+# Agent Inovasi
 
-A multiplayer agent harness for work. In Slack and on the web.
+Coding & working agent untuk tim Indonesia — di web dan (opsional) di Slack.
 
-![The Agent Inovasi web UI: two concurrent sessions, a sidebar of personal files, crons, keychain, deploys, memory, and skills](./docs/screenshots/web-ui-hero.png)
+Agent yang **benar-benar mengerjakan**: memperbaiki bug dan membuka PR, menjawab dari
+dokumen internal, dan menjalankan pekerjaan rutin — bukan sekadar chatbot.
 
-## What is Agent Inovasi?
+![Web UI Agent Inovasi: sidebar berisi proyek, chat, file, cron, keychain, aplikasi, memory, dan skills](./docs/screenshots/web-ui-hero.png)
 
-Most agents are designed like personal assistants. You can make one work for a whole
-company, but it quickly gets complex. Agent Inovasi is designed for startups. Employees each get
-their own isolated workspace and work independently without affecting each other, and
-they can also collaborate with the agent in channels, group messages, and projects.
+## Apa itu Agent Inovasi?
 
-Each person and each room has its own scoped memory, files, keychain view, permissions,
-crons, web apps, and durable sandbox.
+Agent Inovasi adalah agent yang bekerja untuk **tim**. Setiap orang dan setiap ruang punya
+workspace terisolasi sendiri — memory, files, keychain, permissions, crons, web apps, dan
+sandbox durable — tapi tetap bisa berkolaborasi di channel, group, dan project. **Setiap
+langkah teraudit.**
 
-It's built with open source in mind. Pick your own harness and model and switch between
-them — Pi, OpenCode, Codex, and Claude Code all drive the same core, so a deployment
-isn't tied to any single vendor.
+Dibangun terbuka: pilih harness dan model sendiri. Pi, OpenCode, Codex, dan Claude Code
+menggerakkan core yang sama, jadi tidak terkunci ke satu vendor — dan bisa jalan di atas
+**open model** seperti DeepSeek.
 
-## Features
+## Yang bisa dikerjakan
 
-- **Personal and shared scopes.** People customize the agent to be _theirs_, and still
-  work with it collaboratively in Slack channels and projects.
-- **Slack and web.** The same identity and configuration carries between Slack and the
-  web app.
-- **Admin control.** Set org-level configuration, a security posture, and which
-  harnesses and models are available.
-- **Web apps.** Spin up custom internal apps and publish them to the right people.
-- **Shared skills.** Skills are scope-owned and shareable by grant, with admin-gated
-  promotion to the whole org and skill packs imported from git repositories.
-- **Background work.** Crons and watches run work while nobody's watching.
+- **Koding beneran** — kerja di repository yang ada: jalankan test, buka PR, monitor CI, cek log.
+- **Jawab dari dokumen internal** — notes, email, dokumen, database, dan web sekaligus, dengan sumber.
+- **Otomasi rutin** — cron & watch yang jalan saat tidak ditungguin (triage inbox, laporan terjadwal).
+- **Bangun & terbitkan aplikasi internal** ke orang yang tepat.
+- **Ingat & belajar** — memory berskop, plus skills (prosedur yang bisa dipakai ulang dan dibagikan).
 
-## What you can do with it
+## Fitur inti
 
-- Search internal notes, email, documents, databases, and the web together
-- Retrieve information from your company brain
-- Build internal apps, publish them to the right people, and keep their data current
-- Learn your writing voice from past sends, then triage your inbox on a schedule —
-  labels and reply drafts included
-- Work in an existing repository: run tests, open PRs, monitor CI, check system logs
-- Track a project in a shared channel and post updates and follow-ups
+- **Scope personal & bersama.** Tiap orang mempersonalisasi agent-nya, tetap bisa kolaborasi di project.
+- **Web (& Slack opsional).** Identitas dan konfigurasi yang sama lintas surface.
+- **Kontrol admin.** Atur security posture, serta harness & model yang diizinkan.
+- **Web apps.** Buat aplikasi internal lalu terbitkan ke pengguna yang tepat.
+- **Shared skills.** Skills dimiliki scope, dibagikan lewat grant, bisa dipromosikan ke seluruh org.
+- **Background work.** Crons & watches berjalan saat tidak ada yang menunggui.
 
-## Architecture
+## Arsitektur
 
 ```mermaid
 flowchart LR
@@ -49,143 +43,74 @@ flowchart LR
 
   subgraph CORE["Headless core"]
     API["API · identity · policy · scheduler"]
-    LOOP["Agent loop<br/>(Pi, OpenCode, Claude Code)"]
+    LOOP["Agent loop<br/>(Pi, OpenCode, Codex, Claude Code)"]
     API <--> LOOP
   end
 
-  SBX["Per-scope sandbox<br/>files · tools · logged-in services"]
+  SBX["Sandbox per-scope<br/>files · tools · logins"]
 
   DB <--> API
   LOOP <--> SBX
 ```
 
-Every turn runs through a central core, which can use a variety of models and harnesses
-to generate the response. A Postgres persistence layer holds user data, session history,
-and other durable state. The agent has a small, fixed tool surface; one of those tools is
-`execute`, which runs commands in the scope's own isolated sandbox — its durable computer,
-where installed tools stay installed. The web UI, the admin panel, and the public portal
-are optional plugins over the core's HTTP API;
-Slack is an optional in-process plugin that core starts
-and supervises through a direct service client.
+Setiap turn melewati satu core terpusat yang bisa memakai berbagai model dan harness.
+Postgres menyimpan data pengguna, riwayat sesi, dan state durable lain. Agent punya tool
+surface yang kecil dan tetap; salah satunya `execute` — menjalankan perintah di **sandbox
+Linux terisolasi** milik scope (komputer durable-nya, tempat tools yang di-install tetap
+terpasang). Web UI, admin, dan portal adalah plugin opsional di atas HTTP API core; Slack
+adalah plugin in-process opsional.
 
-The core runs TypeScript directly on Node and uses Fastify for HTTP. The Slack plugin
-uses Bolt; the web UI builds with Vite and renders with Lit.
+Core berjalan langsung di Node (TypeScript) dengan Fastify. Web UI dibangun dengan Vite +
+Lit. Sandbox agent sudah dilengkapi dev tools (git, Node, Python, dll.), jadi agent bisa
+langsung clone → edit → test → commit.
 
-The core itself is generic. Everything specific to one company — org config, custom tools
-and skills, sandbox image, infrastructure — lives in a **deployment directory** that the
-[`qm` CLI](./cli/README.md) validates and deploys. Every substrate (harness, session
-store, sandbox, memory) sits behind an interface, so production implementations swap in
-via one wiring file.
+## Keamanan
 
-## Security and secrets
+Agent bertindak **sebagai** orang yang diwakilinya — dengan kredensial dan izin mereka —
+dan semuanya teraudit. Org memilih satu security posture yang hanya bisa diperketat oleh
+scope yang lebih sempit:
 
-Agent Inovasi's approach follows local coding agents like OpenCode, Codex, and Claude Code: the
-agent acts as the person it's working for, with their credentials and permissions, and
-everything it does is audited. An org picks one security posture, which narrower scopes
-can only tighten:
+- **Strict** — tiap tool call menunggu persetujuan manusia.
+- **Auto** (default) — classifier menyaring data eksternal berlabel provenance sebelum sampai ke model.
+- **Dangerous** — tanpa penyaringan, tanpa jeda.
 
-- **Strict** — every harness tool call pauses for human approval, except the two
-  no-effect turn enders.
-- **Auto** (default) — a classifier screens provenance-labelled external data and tool
-  results before they reach the model; a deployment can point that at its own screening
-  proxy.
-- **Dangerous** — no content screening, no pauses between tool calls.
+Command policy (aturan approval & larangan keras seperti `rm -rf` atau SQL destruktif)
+berlaku di semua posture. Detail model ancaman, asumsi operator, dan batasan yang
+diketahui ada di [`SECURITY.md`](./SECURITY.md).
 
-The predeclared command policy — approval rules and hard denials for things like
-recursive deletes or destructive SQL — applies in every posture, Dangerous included.
+## Jalankan di mesin sendiri (satu perintah)
 
-[`SECURITY.md`](./SECURITY.md) has the threat model, the operator assumptions, and the
-known limitations.
-
-## Run it locally
-
-To try Agent Inovasi on your own machine in one command — chat UI, admin, DeepSeek,
-Postgres, and the agent sandbox all wired up — see [`QUICKSTART.md`](./QUICKSTART.md):
+Untuk mencoba Agent Inovasi secara lokal — chat UI, admin, model (DeepSeek), Postgres, dan
+sandbox agent langsung ter-wiring — lihat [`QUICKSTART.md`](./QUICKSTART.md):
 
 ```bash
 npm install
 npm run quickstart
 ```
 
-Requires Node ≥ 24.15, Docker, and a DeepSeek API key.
+Butuh Node ≥ 24.15, Docker, dan sebuah DeepSeek API key.
 
-## Deploy it for your org
+## Deploy untuk org
 
-Create an organization-owned deployment repository that depends on `@yc-software/qm`:
-
-```bash
-npm exec --yes --package=@yc-software/qm@latest -- \
-  qm init . --org <slug> --target <fly-or-aws>
-npm install
-```
-
-Initialization materializes a deployment skill for an agent and walks through
-infrastructure, web sign-in, connector credentials, optional Slack access, deployment,
-and live verification — no source checkout required. Each deployment runs in the
-operator's own cloud account; initialization does not generate or enable deployment CI,
-and this repository has no production deployment workflow. See
-[`deployment.md`](./deployment.md) for the details.
-
-## Contributing
-
-We take contributions as _human-written_ text, not code — see
-[`CONTRIBUTING.md`](./CONTRIBUTING.md). Describe the change you'd like informally in a
-`.txt` or `.md` file in [`adrs/`](./adrs/), and if we're aligned we'll handle the
-implementation. Report vulnerabilities privately — see [`SECURITY.md`](./SECURITY.md),
-not a public issue.
-
-## Customize your instance
-
-The deployment repository above carries config and a sandbox layer, and never needs a
-source checkout. Some organizations want the opposite trade: the whole codebase in one
-place, so engineers and coding agents read core and customizations together, while the
-customizations themselves stay private. For that, keep a **private fork**: a standalone
-private repository whose history begins as a clone of qm and whose core stays identical
-to upstream.
-
-Populate it once, then clone it to work in:
+CLI menyiapkan deployment ke **Docker**, **Fly.io**, atau **AWS**:
 
 ```bash
-gh repo create <org>/qm-private --private
-
-git clone --bare git@github.com:yc-software/qm qm-seed.git
-git -C qm-seed.git push --mirror git@github.com:<org>/qm-private
-rm -rf qm-seed.git
-
-git clone git@github.com:<org>/qm-private
-git -C qm-private remote add upstream git@github.com:yc-software/qm
+node cli/bin/qm.ts init . --org <slug> --target <docker|fly|aws>
 ```
 
-Create the private fork with a plain clone, as shown above, and never with GitHub's fork
-feature. The word "fork" here names the concept — a downstream copy that diverges
-deliberately and merges from upstream — not GitHub's Fork button. A GitHub fork inherits
-the visibility of the repository it came from, so a fork of a public repository cannot be
-made private. A GitHub fork also shares one object network with the repository it came
-from, so commits pushed to the fork stay fetchable by SHA from the public side. Many
-organizations disallow forking private repositories as well. A plain clone has none of
-these problems, and it costs one thing: the clone is an ordinary repository, so upstream's
-CI workflows run live in your own account. Expect to supply the secrets those workflows
-need, or disable the ones you do not want running.
+Setiap deployment berjalan di akun cloud milik operator. Untuk pakai DeepSeek, set
+`MODEL_PROVIDER=deepseek` + `DEEPSEEK_API_KEY`. Detail lengkap ada di
+[`deployment.md`](./deployment.md) dan [`cli/README.md`](./cli/README.md).
 
-Everything specific to your organization goes in `deploy/layers/<org>/` — config, sandbox
-tools and skills, plugin images, infrastructure — in the same shape `qm init` produces. See
-[`deploy/layers/README.md`](./deploy/layers/README.md). Core stays byte-identical to
-upstream, which is what keeps merges small.
+## Cek kesiapan sebagai coding agent
 
-Two skills maintain the boundary in both directions. `update-qm` merges upstream qm into
-the private fork and opens the sync PR; `upstream-pr` sends an organization-agnostic fix back to
-qm, cutting the branch from `upstream/main` and checking the outgoing diff, commit
-messages, and screenshots for organization identifiers before it pushes. Nothing under
-`deploy/layers/` ever travels upstream.
+```bash
+npm run coding-check
+```
 
-## Going deeper
+Memvalidasi bahwa harness dapat melayani model yang dipilih, sandbox punya dev tools
+(git/node/python), dan tool `execute` ter-wiring — tanpa perlu API key.
 
-- [`docs/getting-started.md`](./docs/getting-started.md) — first run, end to end
-- [`cli/README.md`](./cli/README.md) — the `qm` CLI and the deployment directory contract
-- [`docs/deploy-directory.md`](./docs/deploy-directory.md) — the deployment directory in full
-- [`.env.example`](./.env.example) — every knob, documented in place
-- [`plugins/`](./plugins) — the surfaces (Slack, web UI, admin, portal)
+## Lisensi
 
-## License
-
-Except where otherwise noted, Agent Inovasi is available under the [MIT License](./LICENSE).
+Kecuali dinyatakan lain, Agent Inovasi tersedia di bawah [MIT License](./LICENSE).
