@@ -9,6 +9,7 @@ import {
   modelServiceable,
   ALL_PROVIDERS_AVAILABLE,
   resolveModel,
+  isModelProvider,
 } from "../../../model/pi-models.ts";
 import {
   builtInModelCatalog,
@@ -248,9 +249,7 @@ export async function getScopeConfig(ctx: ApiCtx): Promise<void> {
   const resolvedCurrent = runtime && typeof runtime.modelId === "string" ? resolveModel(runtime.modelId) : null;
   const currentProvider = resolvedCurrent?.provider;
   const currentModel =
-    runtime &&
-    typeof runtime.modelId === "string" &&
-    (currentProvider === "anthropic" || currentProvider === "openai" || currentProvider === "openrouter")
+    runtime && typeof runtime.modelId === "string" && isModelProvider(currentProvider)
       ? ({ id: runtime.modelId, name: resolvedCurrent!.name, provider: currentProvider } satisfies ModelCatalogEntry)
       : null;
   const modelsFor = (harnessId: string) => {

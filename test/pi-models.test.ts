@@ -122,6 +122,11 @@ test("auxiliary models come from the configured base model's own provider", () =
     "an OpenAI deployment gets an OpenAI auxiliary, never Haiku",
   );
   assert.equal(auxiliaryModelFor("gpt-5.6-terra"), "gpt-5.6-luna");
+  assert.equal(
+    auxiliaryModelFor("deepseek-v4-pro"),
+    "deepseek-v4-flash",
+    "a DeepSeek deployment gets a DeepSeek auxiliary, never a cross-provider model",
+  );
 });
 
 test("the Anthropic auxiliary is resolvable by provider, so Anthropic-only surfaces keep working", () => {
