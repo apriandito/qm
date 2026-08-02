@@ -81,5 +81,9 @@ Everything works with defaults. Override with environment variables if needed:
 ## What this is (and isn't)
 
 This is a single-machine, single-operator setup for trying and self-hosting Agent
-Inovasi. It intentionally skips the production sign-in portal and TLS. For a public,
-multi-user deployment, use the deployment CLI (`qm init --target fly|aws`) instead.
+Inovasi. It intentionally skips the production sign-in portal and TLS, which also
+turns off the signed control plane. In this local mode the agent can chat and run
+commands in its sandbox, but the following are **disabled**: scheduled crons and
+reminders, tools that authenticate through OAuth connectors, and publishing web apps.
+Those need the signed deployment. For a public, multi-user deployment with the full
+tool set, use the deployment CLI (`qm init --target fly|aws`) instead.

@@ -142,11 +142,33 @@ async function ensurePostgres(dbPassword: string): Promise<string> {
   }
   for (let attempt = 0; attempt < 60; attempt++) {
     if (tryExec("docker", ["exec", DB_CONTAINER, "pg_isready", "-U", DB_USER, "-d", DB_NAME]).ok) {
+      verifyPostgresAuth(dbPassword);
       return `postgres://${DB_USER}:${dbPassword}@localhost:${DB_PORT}/${DB_NAME}`;
     }
     await sleep(1000);
   }
   return fail("Postgres did not become ready in time.");
+}
+
+function verifyPostgresAuth(dbPassword: string): void {
+  const check = tryExec("docker", [
+    "exec",
+    "-e",
+    `PGPASSWORD=${dbPassword}`,
+    DB_CONTAINER,
+    "psql",
+    "-U",
+    DB_USER,
+    "-d",
+    DB_NAME,
+    "-tAc",
+    "select 1",
+  ]);
+  if (!check.ok) {
+    fail(
+      `Postgres rejected the stored credential. The ${DB_VOLUME} volume was initialized with a different password (deleting .env.quickstart while keeping the volume does this). Run \`npm run quickstart:down\` then \`docker volume rm ${DB_VOLUME}\` to reset, or restore the original .env.quickstart.`,
+    );
+  }
 }
 
 function runInherit(command: string, args: string[], cwd: string): boolean {
