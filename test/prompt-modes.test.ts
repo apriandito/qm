@@ -200,7 +200,7 @@ test("Mode 1 (DM): live-conversation frame, org policy once, no template leaks, 
 
   assert.doesNotMatch(prompt, /no one ever reads this transcript/);
   assert.doesNotMatch(prompt, /stay_silent/);
-  assert.match(prompt, /You are QM/);
+  assert.match(prompt, /You are Agent Inovasi/);
 });
 
 test("Mode 1 (DM): org policy still renders exactly once when the scope soul duplicates it verbatim", async () => {

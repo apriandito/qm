@@ -2,8 +2,8 @@ import { html, type TemplateResult } from "lit";
 import { createElement, type IconNode } from "lucide";
 
 export function brandName(): string {
-  if (typeof document === "undefined") return "QM";
-  return document.querySelector<HTMLMetaElement>('meta[name="brand-self-label"]')?.content || "QM";
+  if (typeof document === "undefined") return "Agent Inovasi";
+  return document.querySelector<HTMLMetaElement>('meta[name="brand-self-label"]')?.content || "Agent Inovasi";
 }
 
 export function brandMark(): TemplateResult {

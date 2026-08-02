@@ -787,7 +787,7 @@ export function createOrchestrator(deps: OrchestratorDeps): Orchestrator {
         frameVars = {
           userName: actor.displayName?.trim() || "there",
           userEmail: actor.id.includes("@") ? actor.id : undefined,
-          surfaceLabel: isWeb ? "the QM web app" : "Slack",
+          surfaceLabel: isWeb ? "the Agent Inovasi web app" : "Slack",
           slack: isSlack,
           web: isWeb,
         };

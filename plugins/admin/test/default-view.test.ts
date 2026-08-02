@@ -4,8 +4,8 @@ import test from "node:test";
 
 const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
 
-test("admin shell uses the QM identity with org-injectable branding", () => {
-  assert.match(html, /<title>QM Admin<\/title>/);
+test("admin shell uses the Agent Inovasi identity with org-injectable branding", () => {
+  assert.match(html, /<title>Agent Inovasi Admin<\/title>/);
   assert.match(html, /<meta name="brand-self-label" content="Agent" \/>/);
   assert.match(html, /<div class="brand"><span id="brand-product">Agent<\/span>&nbsp;Admin /);
   assert.doesNotMatch(html, new RegExp(["Work", "Claw"].join(" "), "i"));

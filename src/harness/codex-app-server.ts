@@ -83,7 +83,7 @@ export class CodexAppServer {
 
   async initialize(): Promise<void> {
     await this.request("initialize", {
-      clientInfo: { name: "qm", title: "QM", version: "1" },
+      clientInfo: { name: "qm", title: "Agent Inovasi", version: "1" },
       capabilities: { experimentalApi: true },
     });
     await this.notify("initialized");
