@@ -33,11 +33,11 @@ dan bisa berjalan di atas **open model** seperti DeepSeek.
 
 Yang bisa dikerjakan:
 
-- **Koding beneran** — bekerja di repository yang ada: menjalankan test, membuka PR, memonitor CI, membaca log.
+- **Mengerjakan kode** — bekerja langsung di repository yang ada: menjalankan test, membuka PR, memonitor CI, membaca log.
 - **Menjawab dari dokumen internal** — notes, email, dokumen, database, dan web sekaligus, lengkap dengan sumber.
-- **Otomasi rutin** — cron & watch yang berjalan saat tidak ditunggui (triage inbox, laporan terjadwal).
+- **Otomasi rutin** — cron & watch yang berjalan tanpa perlu ditunggu (triage inbox, laporan terjadwal).
 - **Membangun & menerbitkan aplikasi internal** ke orang yang tepat.
-- **Mengingat & belajar** — memory berskop, plus skills (prosedur yang bisa dipakai ulang dan dibagikan).
+- **Mengingat & belajar** — memory berskop, ditambah skills (prosedur yang bisa dipakai ulang dan dibagikan).
 
 ## Panduan cepat: menjalankan di mesin sendiri
 
@@ -87,7 +87,7 @@ Kamu bisa menyaring berdasarkan kepemilikan dan tipe, atau meminta agent membuat
 ### Cron
 
 Untuk pekerjaan yang berjalan otomatis dan terjadwal — misalnya triage inbox tiap pagi
-atau laporan mingguan. Cron tetap berjalan meski tidak ada yang menungguinya.
+atau laporan mingguan. Cron tetap berjalan meski tidak ada yang menunggu.
 
 ![Halaman Cron Agent Inovasi dengan tombol Cron baru](./docs/screenshots/cron.png)
 
@@ -121,7 +121,7 @@ permintaan yang bisa langsung kamu coba:
 - "Clone repository ini, jalankan test-nya, lalu perbaiki test yang gagal dan buka PR."
 - "Rangkum semua email minggu ini dari klien, kelompokkan per topik."
 - "Buatkan cron yang mengirim laporan penjualan tiap Senin jam 8 pagi."
-- "Bikin aplikasi internal sederhana untuk mencatat absensi, lalu deploy ke tim HR."
+- "Buat aplikasi internal sederhana untuk mencatat absensi, lalu deploy ke tim HR."
 
 Agent akan menjelaskan langkah yang diambil, meminta persetujuan bila diperlukan (sesuai
 security posture), dan menyimpan hasilnya di File, Memory, atau Aplikasi.

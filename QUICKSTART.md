@@ -5,7 +5,7 @@ admin panel, model (DeepSeek), Postgres, dan sandbox agent semuanya sudah terhub
 
 ## Yang perlu disiapkan
 
-- **Node.js ≥ 24.15** — cek dengan `node --version` (install lewat `nvm install 24`)
+- **Node.js ≥ 24.15** — periksa dengan `node --version` (install lewat `nvm install 24`)
 - **Docker** yang berjalan — dipakai untuk sandbox terisolasi milik agent dan untuk Postgres
 - Sebuah **DeepSeek API key** — dari [platform.deepseek.com](https://platform.deepseek.com)
 
@@ -56,7 +56,7 @@ Setelah selesai, kamu akan melihat:
 
 ## Menghentikan
 
-- `Ctrl-C` menghentikan service. Postgres tetap berjalan supaya data kamu bertahan setelah restart.
+- `Ctrl-C` menghentikan service. Postgres tetap berjalan agar data kamu tetap ada setelah restart.
 - `npm run quickstart:down` menghapus container Postgres (volume datanya tetap disimpan;
   `docker volume rm agent-inovasi-pgdata` menghapusnya).
 
@@ -74,7 +74,7 @@ Semuanya berjalan dengan nilai default. Ubah lewat environment variable bila per
 | `QUICKSTART_ADMIN_PORT` | `8090`         | Port admin panel                              |
 | `QUICKSTART_DB_PORT`    | `5432`         | Host port untuk Postgres                      |
 
-## Kalau ada masalah
+## Jika ada masalah
 
 - **"needs Node ≥ 24.15"** — upgrade Node (`nvm install 24 && nvm use 24`).
 - **"Docker … not reachable"** — jalankan Docker Desktop atau service docker.
