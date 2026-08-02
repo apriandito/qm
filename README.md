@@ -118,8 +118,8 @@ orang yang tepat. Untuk memulai, tombol **Deploy pakai Agent** ditekan.
 
 ## Cara pakai sehari-hari
 
-Alurnya: membuka Chat, menulis permintaan, lalu agent mengerjakannya. Beberapa contoh
-permintaan:
+Agent Inovasi digunakan dengan alur berikut: membuka Chat, menulis permintaan, lalu agent
+mengerjakannya. Beberapa contoh permintaan:
 
 - "Clone repository ini, jalankan test-nya, lalu perbaiki yang gagal dan buka PR."
 - "Rangkum semua email minggu ini dari klien, kelompokkan per topik."
@@ -168,7 +168,7 @@ tersedia di [`SECURITY.md`](./SECURITY.md).
 
 ## Cara kerja di balik layar
 
-Alurnya:
+Agent Inovasi bekerja dengan alur sebagai berikut:
 
 1. Permintaan diberikan lewat **web** atau **Slack**.
 2. Permintaan masuk ke satu **pusat (core)** yang mengatur identitas, izin, dan jadwal.
