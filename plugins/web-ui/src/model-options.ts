@@ -164,12 +164,12 @@ export function transcriptModel(): Model<Api> {
 export type EffortLevel = "low" | "medium" | "high" | "xhigh" | "max" | "ultracode" | "auto";
 
 export const EFFORT_LEVELS: Array<{ value: EffortLevel; label: string }> = [
-  { value: "auto", label: "Auto" },
-  { value: "low", label: "Low" },
-  { value: "medium", label: "Medium" },
-  { value: "high", label: "High" },
-  { value: "xhigh", label: "XHigh" },
-  { value: "max", label: "Max" },
+  { value: "auto", label: "Otomatis" },
+  { value: "low", label: "Rendah" },
+  { value: "medium", label: "Sedang" },
+  { value: "high", label: "Tinggi" },
+  { value: "xhigh", label: "Sangat Tinggi" },
+  { value: "max", label: "Maksimum" },
   { value: "ultracode", label: "Ultracode" },
 ];
 

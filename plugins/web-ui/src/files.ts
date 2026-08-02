@@ -22,6 +22,12 @@ interface FileRow extends FileItem {
   kind: "Created" | "Uploaded" | "Shared";
 }
 
+const KIND_LABELS: Record<FileRow["kind"], string> = {
+  Created: "Dibuat",
+  Uploaded: "Di-upload",
+  Shared: "Dibagikan",
+};
+
 const PAGE_SIZE = 60;
 let fileRows: FileRow[] = [];
 let filesNotice = "";
@@ -86,17 +92,17 @@ function drawFiles(loading = false): void {
   }
   const visible = visibleFiles();
   const filtered = Boolean(filesScope || filesQuery.trim() || filesType !== "all" || filesOwnership !== "all");
-  let dropLabel = "Drop files here or choose files";
-  if (filesDragActive) dropLabel = "Drop files";
-  else if (filesUploading) dropLabel = "Uploading…";
-  const status = filesNotice || (loading && !fileRows.length ? "Loading files…" : "");
+  let dropLabel = "Letakkan file di sini atau pilih file";
+  if (filesDragActive) dropLabel = "Letakkan file";
+  else if (filesUploading) dropLabel = "Lagi upload…";
+  const status = filesNotice || (loading && !fileRows.length ? "Memuat file…" : "");
   const uploadTarget = filesScope ?? personalScopeId();
   render(
     html`
       <div class="list-page-head">
         <div>
           <h1 class="pane-title">Files</h1>
-          <div class="pane-subtitle">Files created, uploaded, or shared with you</div>
+          <div class="pane-subtitle">File yang dibuat, di-upload, atau dibagikan ke kamu</div>
         </div>
         <div class="list-page-actions">
           ${scopeFilterControl(filesScope, (s) => {
@@ -124,11 +130,11 @@ function drawFiles(loading = false): void {
       </button>
       <div class="list-toolbar">
         <label class="list-search"
-          ><span class="sr-only">Search files</span
+          ><span class="sr-only">Cari file</span
           ><input
             type="search"
-            aria-label="Search files"
-            placeholder="Search file names and types…"
+            aria-label="Cari file"
+            placeholder="Cari nama dan tipe file…"
             .value=${filesQuery}
             @input=${(e: Event) => {
               filesQuery = (e.currentTarget as HTMLInputElement).value;
@@ -137,12 +143,12 @@ function drawFiles(loading = false): void {
             }}
         /></label>
         ${selectControl(
-          "Ownership",
+          "Kepemilikan",
           filesOwnership,
           [
-            ["all", "All files"],
-            ["owned", "Yours"],
-            ["shared", "Shared"],
+            ["all", "Semua file"],
+            ["owned", "Punya kamu"],
+            ["shared", "Dibagikan"],
           ],
           (v) => {
             filesOwnership = v as typeof filesOwnership;
@@ -151,13 +157,13 @@ function drawFiles(loading = false): void {
           },
         )}
         ${selectControl(
-          "Type",
+          "Tipe",
           filesType,
           [
-            ["all", "All types"],
-            ["image", "Images"],
-            ["document", "Documents"],
-            ["other", "Other"],
+            ["all", "Semua tipe"],
+            ["image", "Gambar"],
+            ["document", "Dokumen"],
+            ["other", "Lainnya"],
           ],
           (v) => {
             filesType = v as typeof filesType;
@@ -166,12 +172,12 @@ function drawFiles(loading = false): void {
           },
         )}
         ${selectControl(
-          "Sort",
+          "Urutkan",
           filesSort,
           [
-            ["newest", "Newest"],
-            ["oldest", "Oldest"],
-            ["name", "Name"],
+            ["newest", "Terbaru"],
+            ["oldest", "Terlama"],
+            ["name", "Nama"],
           ],
           (v) => {
             filesSort = v as typeof filesSort;
@@ -180,8 +186,8 @@ function drawFiles(loading = false): void {
           },
         )}
       </div>
-      ${visible.length ? html`<div class="list-rows file-list">${visible.map(fileRow)}</div>` : html`<div class="empty compact">${filtered ? "No files match these filters." : "No files yet. Upload one here or ask the agent to create one."}</div>`}
-      ${filesNextCursor ? html`<div class="list-footer"><button class="btn" type="button" ?disabled=${filesLoadingMore} @click=${() => void loadMoreFiles()}>${filesLoadingMore ? "Loading…" : "Load more"}</button></div>` : nothing}
+      ${visible.length ? html`<div class="list-rows file-list">${visible.map(fileRow)}</div>` : html`<div class="empty compact">${filtered ? "Nggak ada file yang cocok dengan filter ini." : "Belum ada file. Upload di sini atau minta agent buat bikinin satu."}</div>`}
+      ${filesNextCursor ? html`<div class="list-footer"><button class="btn" type="button" ?disabled=${filesLoadingMore} @click=${() => void loadMoreFiles()}>${filesLoadingMore ? "Memuat…" : "Muat lagi"}</button></div>` : nothing}
     `,
     filesHost,
   );
@@ -194,9 +200,10 @@ function fileRow(f: FileRow) {
     <span class="file-row-icon">${icon(isImage ? Image : File, 17)}</span>
     <span class="list-row-title"><span>${f.name}</span><span class="file-row-type">${f.mimetype}</span></span>
     <span class="list-row-meta"
-      >${scopeChip(fileScope(f))}<span class="badge">${f.kind}</span><span>${formatBytes(f.sizeBytes)}</span
+      >${scopeChip(fileScope(f))}<span class="badge">${KIND_LABELS[f.kind]}</span
+      ><span>${formatBytes(f.sizeBytes)}</span
       ><span>${relTime(f.createdAt)}</span
-      >${f.openable ? html`<a class="btn compact" href=${contentUrl} target="_blank" rel="noreferrer">Open</a>` : html`<span>Unavailable</span>`}</span
+      >${f.openable ? html`<a class="btn compact" href=${contentUrl} target="_blank" rel="noreferrer">Buka</a>` : html`<span>Tidak tersedia</span>`}</span
     >
   </article>`;
 }
@@ -219,7 +226,7 @@ async function uploadOne(file: globalThis.File): Promise<void> {
   });
   if (!r.ok) {
     const text = await r.text();
-    let message = `Upload failed (${r.status})`;
+    let message = `Upload gagal (${r.status})`;
     try {
       const parsed = JSON.parse(text) as { message?: string; error?: string } & SigninRequired;
       if (r.status === 401) reportSigninRequired(parsed);
@@ -235,7 +242,7 @@ async function uploadFiles(files: globalThis.File[]): Promise<void> {
   const picked = files.filter((f) => f.size >= 0);
   if (!picked.length || filesUploading) return;
   filesUploading = true;
-  filesNotice = `Uploading ${picked.length} ${picked.length === 1 ? "file" : "files"}…`;
+  filesNotice = `Lagi upload ${picked.length} file…`;
   drawFiles();
   let uploaded = 0;
   try {
@@ -243,10 +250,10 @@ async function uploadFiles(files: globalThis.File[]): Promise<void> {
       await uploadOne(file);
       uploaded++;
     }
-    filesNotice = `Uploaded ${picked.length} ${picked.length === 1 ? "file" : "files"}.`;
+    filesNotice = `${picked.length} file berhasil di-upload.`;
     await loadFiles(appState.viewRenderSeq);
   } catch (e) {
-    filesNotice = `${uploaded ? `Uploaded ${uploaded} of ${picked.length}. ` : ""}${errMessage(e, "Upload failed.")}`;
+    filesNotice = `${uploaded ? `${uploaded} dari ${picked.length} file berhasil di-upload. ` : ""}${errMessage(e, "Upload gagal.")}`;
     if (uploaded) await loadFiles(appState.viewRenderSeq);
     else drawFiles();
   } finally {
@@ -322,7 +329,7 @@ async function loadMoreFiles(): Promise<void> {
     filesNextCursor = page.nextCursor;
   } catch (e) {
     if (requestSeq !== filesRequestSeq) return;
-    filesNotice = errMessage(e, "Failed to load more files.");
+    filesNotice = errMessage(e, "Gagal memuat file lainnya.");
   }
   if (requestSeq !== filesRequestSeq) return;
   filesLoadingMore = false;
@@ -355,7 +362,7 @@ async function loadAllFiles(): Promise<void> {
     }
   } catch (e) {
     if (requestSeq !== filesRequestSeq) return;
-    filesNotice = errMessage(e, "Failed to load all matching files.");
+    filesNotice = errMessage(e, "Gagal memuat semua file yang cocok.");
   }
   if (requestSeq !== filesRequestSeq) return;
   filesLoadAllQueued = false;
@@ -377,7 +384,7 @@ async function loadFiles(seq: number): Promise<void> {
     void loadAllFiles();
   } catch (e) {
     if (requestSeq !== filesRequestSeq || seq !== appState.viewRenderSeq || appState.currentView !== "files") return;
-    filesNotice = errMessage(e, "Failed to load files.");
+    filesNotice = errMessage(e, "Gagal memuat file.");
   }
   drawFiles();
 }

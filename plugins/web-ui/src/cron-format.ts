@@ -27,7 +27,7 @@ function humanizeCronInterval(ms: number): string {
 
 export function cronScheduleSummary(c: CronTimingView): string {
   if (c.schedule.cron) return `cron ${c.schedule.cron.trim().replace(/\s+/g, " ")}`;
-  return c.schedule.everyMs != null ? `every ${humanizeCronInterval(c.schedule.everyMs)}` : "one-time";
+  return c.schedule.everyMs != null ? `setiap ${humanizeCronInterval(c.schedule.everyMs)}` : "sekali jalan";
 }
 
 export function cronScheduleDetail(c: CronTimingView): string {
@@ -35,11 +35,11 @@ export function cronScheduleDetail(c: CronTimingView): string {
   const label = summary.charAt(0).toUpperCase() + summary.slice(1);
   if (c.schedule.cron) {
     const tz = c.schedule.timezone?.trim();
-    return `${label}${tz ? ` (${tz})` : " (default timezone)"}`;
+    return `${label}${tz ? ` (${tz})` : " (timezone bawaan)"}`;
   }
   if (c.schedule.firstFireAt == null) return label;
   if (c.schedule.everyMs != null && c.lastFiredAt != null) return label;
-  const runLabel = c.schedule.everyMs != null ? "first run" : "run";
+  const runLabel = c.schedule.everyMs != null ? "run pertama" : "run";
   return `${label} - ${runLabel} ${formatCronDateTime(c.schedule.firstFireAt, Date.now(), c.schedule.timezone)}`;
 }
 
@@ -55,19 +55,19 @@ export function cronNextFire(c: CronTimingView): number | null {
 export function cronRunSummary(c: CronTimingView, now = Date.now()): string {
   const next = cronNextFire(c);
   const tz = c.schedule.cron ? calendarTimezone(c.schedule) : c.schedule.timezone;
-  if (next != null) return `${next <= now ? "due" : "next"} ${formatCronDateTime(next, now, tz)}`;
-  if (c.lastFiredAt != null) return `last ${relTime(c.lastFiredAt)}`;
-  if (c.schedule.firstFireAt != null) return `first ${formatCronDateTime(c.schedule.firstFireAt, now, tz)}`;
-  return "never fired";
+  if (next != null) return `${next <= now ? "jatuh tempo" : "berikutnya"} ${formatCronDateTime(next, now, tz)}`;
+  if (c.lastFiredAt != null) return `terakhir ${relTime(c.lastFiredAt)}`;
+  if (c.schedule.firstFireAt != null) return `pertama ${formatCronDateTime(c.schedule.firstFireAt, now, tz)}`;
+  return "belum pernah jalan";
 }
 
 export function cronRunSummaryTitle(c: CronTimingView): string {
   const tz = c.schedule.cron ? calendarTimezone(c.schedule) : c.schedule.timezone;
   const next = cronNextFire(c);
-  if (next != null) return `Next run: ${formatTitleDateTime(next, tz)}`;
-  if (c.lastFiredAt != null) return `Last fired: ${formatTitleDateTime(c.lastFiredAt, tz)}`;
-  if (c.schedule.firstFireAt != null) return `First run: ${formatTitleDateTime(c.schedule.firstFireAt, tz)}`;
-  return "Never fired";
+  if (next != null) return `Run berikutnya: ${formatTitleDateTime(next, tz)}`;
+  if (c.lastFiredAt != null) return `Terakhir jalan: ${formatTitleDateTime(c.lastFiredAt, tz)}`;
+  if (c.schedule.firstFireAt != null) return `Run pertama: ${formatTitleDateTime(c.schedule.firstFireAt, tz)}`;
+  return "Belum pernah jalan";
 }
 
 export function formatCronDateTime(ms: number, now = Date.now(), timeZone?: string): string {
@@ -79,7 +79,7 @@ export function formatCronDateTime(ms: number, now = Date.now(), timeZone?: stri
     if (zonedDate && zonedToday) {
       const time = formatTime(ms, timeZone);
       if (isSameDay(zonedDate, zonedToday)) return time;
-      if (isSameDay(zonedDate, addDays(zonedToday, 1))) return `tomorrow ${time}`;
+      if (isSameDay(zonedDate, addDays(zonedToday, 1))) return `besok ${time}`;
       const dateOpts: Intl.DateTimeFormatOptions =
         zonedDate.getFullYear() === zonedToday.getFullYear()
           ? { month: "short", day: "numeric", timeZone }
@@ -89,7 +89,7 @@ export function formatCronDateTime(ms: number, now = Date.now(), timeZone?: stri
   }
   const time = formatTime(ms);
   if (isSameDay(date, today)) return time;
-  if (isSameDay(date, addDays(today, 1))) return `tomorrow ${time}`;
+  if (isSameDay(date, addDays(today, 1))) return `besok ${time}`;
   const dateOpts: Intl.DateTimeFormatOptions =
     date.getFullYear() === today.getFullYear()
       ? { month: "short", day: "numeric" }

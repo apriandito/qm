@@ -170,7 +170,7 @@ export async function renderContexts(): Promise<void> {
     if (seq !== appState.viewRenderSeq || appState.currentView !== "contexts") return;
   } catch (e) {
     if (seq !== appState.viewRenderSeq || appState.currentView !== "contexts") return;
-    contextsNotice = errMessage(e, "Failed to load contexts.");
+    contextsNotice = errMessage(e, "Gagal memuat konteks.");
   }
   contextsLoading = false;
   if (
@@ -189,23 +189,23 @@ function contextMeta(c: CoreContext): { title: string; sub: string; glyph: IconN
     const memberCount = projectPeople(c).length;
     return {
       title: c.project.name,
-      sub: `${memberCount} ${memberCount === 1 ? "member" : "members"}`,
+      sub: `${memberCount} anggota`,
       glyph: Folder,
     };
   }
   if (c.kind === "personal") {
-    return { title: "Personal", sub: "Just you — your web chats and DMs with the agent live here.", glyph: User };
+    return { title: "Pribadi", sub: "Cuma kamu — chat web dan DM kamu sama si agent ada di sini.", glyph: User };
   }
   if (c.kind === "group") {
     return {
       title: sharedContextLabel(c.scopeId, c.name) ?? "Group DM",
-      sub: "Shared with everyone in this group conversation.",
+      sub: "Dibagikan ke semua orang di percakapan grup ini.",
       glyph: Users,
     };
   }
   return {
     title: sharedContextLabel(c.scopeId, c.name) ?? "Channel",
-    sub: "Shared with everyone in this channel.",
+    sub: "Dibagikan ke semua orang di channel ini.",
     glyph: Hash,
   };
 }
@@ -233,19 +233,19 @@ function metaForScope(scopeId: string | null, fallbackName?: string | null): { t
   const shared = sharedContextLabel(scopeId, fallbackName ?? null);
   if (shared) return { title: shared, glyph: scopeId?.startsWith("group:") ? Users : Hash };
   if (scopeId?.startsWith("personal:") && scopeId !== personalScopeId())
-    return { title: "Shared personal space", glyph: User };
-  return { title: fallbackName?.trim() || "Personal", glyph: User };
+    return { title: "Ruang pribadi bersama", glyph: User };
+  return { title: fallbackName?.trim() || "Pribadi", glyph: User };
 }
 
 export function scopeChip(scopeId: string | null, fallbackName?: string | null): TemplateResult {
   const { title, glyph } = metaForScope(scopeId, fallbackName);
-  return html`<span class="scope-chip" title=${`In ${title}`}
+  return html`<span class="scope-chip" title=${`Di ${title}`}
     >${icon(glyph, 12)}<span>${title.replace(/^#/, "")}</span></span
   >`;
 }
 
 export function scopeFilterControl(current: string | null, onSelect: (scopeId: string | null) => void): TemplateResult {
-  const label = current ? metaForScope(current).title : "All contexts";
+  const label = current ? metaForScope(current).title : "Semua konteks";
   const option = (scopeId: string | null, text: string, glyph: IconNode) => {
     const active = (current ?? null) === scopeId;
     return html`
@@ -268,11 +268,11 @@ export function scopeFilterControl(current: string | null, onSelect: (scopeId: s
   return html`
     <div class="menu-control form-menu-control scope-filter">
       <button class="menu-button" type="button" aria-haspopup="menu" aria-expanded="false" @click=${toggleFormMenu}>
-        ${icon(ListFilter, 14)}<span class="menu-label">Filter by: ${label}</span>${icon(ChevronDown, 14)}
+        ${icon(ListFilter, 14)}<span class="menu-label">Filter: ${label}</span>${icon(ChevronDown, 14)}
       </button>
       <div class="menu-popover" role="menu" hidden>
-        <div class="menu-title">Filter by context</div>
-        ${option(null, "All contexts", Boxes)}
+        <div class="menu-title">Filter berdasarkan konteks</div>
+        ${option(null, "Semua konteks", Boxes)}
         ${contextsState.list.map((c) => option(c.scopeId, contextMeta(c).title, contextMeta(c).glyph))}
       </div>
     </div>
@@ -299,7 +299,7 @@ function drawContexts(): void {
 }
 
 function gridTpl(): TemplateResult {
-  const status = contextsNotice || (contextsLoading && contextsState.list.length === 0 ? "Loading projects…" : "");
+  const status = contextsNotice || (contextsLoading && contextsState.list.length === 0 ? "Memuat proyek…" : "");
   const q = contextsQuery.trim().toLowerCase();
   const matches = (context: CoreContext) => {
     const meta = contextMeta(context);
@@ -321,19 +321,19 @@ function gridTpl(): TemplateResult {
   if (projects.length) projectList = html`<div class="grid project-grid">${projects.map(contextCard)}</div>`;
   else if (!contextsLoading) {
     projectList = html`<div class="empty compact project-empty">
-      ${projectsFiltered ? "No projects match your search." : "No projects yet."}
+      ${projectsFiltered ? "Nggak ada proyek yang cocok sama pencarian kamu." : "Belum ada proyek."}
     </div>`;
   }
   return html`
     <div class="project-grid-content">
       <div class="pane-head">
-        <h1 class="pane-title">Projects</h1>
+        <h1 class="pane-title">Proyek</h1>
         <div class="project-head-actions">
           <button
             class="pane-refresh"
             type="button"
-            aria-label="Refresh projects"
-            title="Refresh projects"
+            aria-label="Muat ulang proyek"
+            title="Muat ulang proyek"
             @click=${() => void renderContexts()}
           >
             ${icon(RefreshCw, 17)}
@@ -341,22 +341,22 @@ function gridTpl(): TemplateResult {
           <button
             class="btn primary project-create-button"
             type="button"
-            aria-label="New project"
-            title="New project"
+            aria-label="Proyek baru"
+            title="Proyek baru"
             @click=${openCreateProject}
           >
-            ${icon(FolderPlus, 15)}<span>New project</span>
+            ${icon(FolderPlus, 15)}<span>Proyek baru</span>
           </button>
         </div>
       </div>
       <div class="list-toolbar project-toolbar">
         <label class="list-search"
-          ><span class="sr-only">Search projects</span
+          ><span class="sr-only">Cari proyek</span
           ><input
             data-focus-key="contexts-search"
             type="search"
-            aria-label="Search projects"
-            placeholder="Search projects…"
+            aria-label="Cari proyek"
+            placeholder="Cari proyek…"
             .value=${contextsQuery}
             @input=${(event: InputEvent) => {
               contextsQuery = (event.currentTarget as HTMLInputElement).value;
@@ -364,7 +364,7 @@ function gridTpl(): TemplateResult {
             }}
         /></label>
         <label class="list-select"
-          ><span>Show</span
+          ><span>Tampilkan</span
           ><select
             .value=${contextsWorkspaceFilter}
             @change=${(event: Event) => {
@@ -373,8 +373,8 @@ function gridTpl(): TemplateResult {
               drawContexts();
             }}
           >
-            <option value="active">Active only</option>
-            <option value="all">Everything</option>
+            <option value="active">Yang aktif aja</option>
+            <option value="all">Semua</option>
           </select></label
         >
       </div>
@@ -386,16 +386,16 @@ function gridTpl(): TemplateResult {
 
 function contextCard(c: CoreContext): TemplateResult {
   const { title, sub, glyph } = contextMeta(c);
-  const count = c.sessionCount === 1 ? "1 conversation" : `${c.sessionCount} conversations`;
-  let access = "shared";
-  if (c.project && isProjectOwner(c)) access = "owned";
-  else if (c.kind === "personal") access = "private";
+  const count = c.sessionCount === 1 ? "1 obrolan" : `${c.sessionCount} obrolan`;
+  let access = "bersama";
+  if (c.project && isProjectOwner(c)) access = "punya kamu";
+  else if (c.kind === "personal") access = "pribadi";
   return html`
     <button class="card context-card" type="button" @click=${() => selectContext(c.scopeId)}>
       <div class="card-head">
         <span class="context-glyph">${icon(glyph, 17)}</span>
         <h2 class="card-title">${title}</h2>
-        ${c.isPrivate ? html`<span class="context-lock" title="Private channel">${icon(Lock, 13)}</span>` : nothing}
+        ${c.isPrivate ? html`<span class="context-lock" title="Channel privat">${icon(Lock, 13)}</span>` : nothing}
         <span class="badge">${access}</span>
       </div>
       <div class="card-meta context-card-sub">${sub}</div>
@@ -412,29 +412,29 @@ function detailTpl(c: CoreContext): TemplateResult {
   return html`
     <div class="context-detail">
       <button class="context-back" type="button" @click=${() => selectContext(null)}>
-        ${icon(ArrowLeft, 15)}<span>Projects</span>
+        ${icon(ArrowLeft, 15)}<span>Proyek</span>
       </button>
       <div class="context-detail-head">
         <span class="context-glyph large">${icon(glyph, 22)}</span>
         <div class="context-detail-titles">
           <h1 class="pane-title">
             ${title}
-            ${c.isPrivate ? html`<span class="context-lock" title="Private channel">${icon(Lock, 14)}</span>` : nothing}
+            ${c.isPrivate ? html`<span class="context-lock" title="Channel privat">${icon(Lock, 14)}</span>` : nothing}
           </h1>
           <div class="context-sub">
-            ${c.project ? sub : `${sub} The agent's files and memory here are separate from your other contexts.`}
+            ${c.project ? sub : `${sub} File dan memory si agent di sini terpisah dari konteks kamu yang lain.`}
           </div>
         </div>
         <div class="context-detail-actions">
           ${
             c.project
               ? html`<button class="btn context-add-member" type="button" @click=${() => toggleMemberPicker(c)}>
-                  ${icon(UserPlus, 15)}<span>Add people</span>
+                  ${icon(UserPlus, 15)}<span>Tambah orang</span>
                 </button>`
               : nothing
           }
           <button class="btn primary context-new-chat" type="button" @click=${() => startChatIn(c)}>
-            ${icon(Plus, 15)}<span>New chat</span>
+            ${icon(Plus, 15)}<span>Chat baru</span>
           </button>
         </div>
       </div>
@@ -445,23 +445,23 @@ function detailTpl(c: CoreContext): TemplateResult {
               ? html`
                   <section class="context-panel context-project-empty">
                     <span class="context-glyph large" aria-hidden="true">${icon(glyph, 22)}</span>
-                    <h2>This project is ready for work</h2>
+                    <h2>Proyek ini siap dipakai</h2>
                     <p>
-                      Start a conversation with New chat. Files, automations, and other work created there will stay
-                      scoped to this project.
+                      Mulai obrolan lewat Chat baru. File, otomasi, dan kerjaan lain yang dibuat di situ bakal tetap ada
+                      di proyek ini.
                     </p>
                   </section>
                 `
               : html`
                   <section class="context-panel context-conversations" aria-labelledby="context-conversations-title">
                     <div class="context-panel-heading">
-                      <h2 class="context-panel-title" id="context-conversations-title">Conversations</h2>
+                      <h2 class="context-panel-title" id="context-conversations-title">Obrolan</h2>
                       ${sessions.length ? html`<span class="context-panel-count">${sessions.length}</span>` : nothing}
                     </div>
                     ${
                       sessions.length
                         ? html`<div class="context-session-list">${sessions.map((s) => contextSessionRow(s))}</div>`
-                        : html`<div class="context-inline-empty">No conversations yet.</div>`
+                        : html`<div class="context-inline-empty">Belum ada obrolan.</div>`
                     }
                   </section>
                   ${resourceSections(c.scopeId)}
@@ -470,7 +470,7 @@ function detailTpl(c: CoreContext): TemplateResult {
         </div>
         ${
           hasSettings
-            ? html`<aside class="context-settings" aria-label=${c.project ? "Project settings" : "Context settings"}>
+            ? html`<aside class="context-settings" aria-label=${c.project ? "Pengaturan proyek" : "Pengaturan konteks"}>
                 ${c.project ? projectMembersSection(c) : nothing} ${ambientPolicySection(c.scopeId)}
               </aside>`
             : nothing
@@ -507,7 +507,7 @@ function projectMembersSection(context: CoreContext): TemplateResult {
   return html`
     <section class="context-panel project-members" aria-labelledby="project-people-title">
       <div class="context-panel-heading">
-        <h2 class="context-panel-title" id="project-people-title">People</h2>
+        <h2 class="context-panel-title" id="project-people-title">Orang</h2>
         <span class="context-panel-count">${projectPeople(context).length}</span>
       </div>
       <div class="project-member-list">
@@ -517,14 +517,14 @@ function projectMembersSection(context: CoreContext): TemplateResult {
             <div class="project-member-row">
               <span class="project-member-avatar" aria-hidden="true">${initials(label)}</span>
               <span class="project-member-name">${label}</span>
-              ${principalId === project.ownerId ? html`<span class="badge">Owner</span>` : nothing}
+              ${principalId === project.ownerId ? html`<span class="badge">Pemilik</span>` : nothing}
               ${
                 isProjectOwner(context) && principalId !== project.ownerId
                   ? html`<button
                       class="project-icon-button danger"
                       type="button"
-                      aria-label=${`Remove ${label}`}
-                      title=${`Remove ${label}`}
+                      aria-label=${`Hapus ${label}`}
+                      title=${`Hapus ${label}`}
                       ?disabled=${contextsState.memberSearching || contextsState.memberBusy}
                       @click=${() => void removeProjectMember(context, principalId)}
                     >
@@ -549,15 +549,15 @@ function memberPicker(context: CoreContext): TemplateResult {
   let emptyNote = "";
   if (idle && contextsState.memberSearchedQuery && matches.length === 0) {
     emptyNote = contextsState.memberMatches.length
-      ? "Everyone matching is already in this project."
-      : `No matches for “${contextsState.memberSearchedQuery}”.`;
+      ? "Semua yang cocok udah ada di proyek ini."
+      : `Nggak ada yang cocok buat “${contextsState.memberSearchedQuery}”.`;
   }
   let memberStatus = emptyNote;
-  if (contextsState.memberSearching) memberStatus = "Searching…";
-  else if (contextsState.memberBusy) memberStatus = "Working…";
+  if (contextsState.memberSearching) memberStatus = "Nyari…";
+  else if (contextsState.memberBusy) memberStatus = "Lagi proses…";
   return html`
     <form class="project-member-picker" @submit=${(event: SubmitEvent) => void searchProjectMembers(event, context)}>
-      <label for="project-member-search">Add people</label>
+      <label for="project-member-search">Tambah orang</label>
       <div class="project-member-search-row">
         ${icon(Search, 16)}
         <input
@@ -567,7 +567,7 @@ function memberPicker(context: CoreContext): TemplateResult {
           type="search"
           autocomplete="off"
           maxlength="80"
-          placeholder="Search by name or handle"
+          placeholder="Cari pakai nama atau handle"
           .value=${contextsState.memberQuery}
           ?disabled=${contextsState.memberBusy}
           @input=${(event: InputEvent) => {
@@ -578,8 +578,8 @@ function memberPicker(context: CoreContext): TemplateResult {
         <button
           class="project-icon-button"
           type="submit"
-          aria-label="Search"
-          title="Search"
+          aria-label="Cari"
+          title="Cari"
           ?disabled=${contextsState.memberSearching || contextsState.memberBusy}
         >
           ${icon(Search, 15)}
@@ -587,8 +587,8 @@ function memberPicker(context: CoreContext): TemplateResult {
         <button
           class="project-icon-button"
           type="button"
-          aria-label="Close"
-          title="Close"
+          aria-label="Tutup"
+          title="Tutup"
           ?disabled=${contextsState.memberBusy}
           @click=${closeMemberPicker}
         >
@@ -622,7 +622,7 @@ function resourceSections(scopeId: string): TemplateResult | typeof nothing {
   const r = contextsState.resources;
   if (!r) {
     return contextsState.resourcesLoading
-      ? html`<div class="empty compact">Loading this context's files, crons, apps and skills…</div>`
+      ? html`<div class="empty compact">Memuat file, cron, app, dan skill di konteks ini…</div>`
       : html``;
   }
   if (r.files.length === 0 && r.crons.length === 0 && r.deployments.length === 0 && r.skills.length === 0) {
@@ -656,7 +656,7 @@ const resourceBusy = new Set<string>();
 async function manageCron(id: string, action: "enable" | "disable" | "delete"): Promise<void> {
   const key = `cron:${id}`;
   if (resourceBusy.has(key)) return;
-  if (action === "delete" && !confirm("Delete this cron? This can't be undone.")) return;
+  if (action === "delete" && !confirm("Hapus cron ini? Nggak bisa dibalikin.")) return;
   resourceBusy.add(key);
   drawContexts();
   try {
@@ -665,7 +665,7 @@ async function manageCron(id: string, action: "enable" | "disable" | "delete"): 
     const scope = contextsState.resourcesScope;
     if (scope) await loadScopeResources(scope);
   } catch (e) {
-    contextsState.resourcesNotice = errMessage(e, "Couldn't update that cron.");
+    contextsState.resourcesNotice = errMessage(e, "Nggak bisa update cron itu.");
   } finally {
     resourceBusy.delete(key);
     drawContexts();
@@ -675,7 +675,7 @@ async function manageCron(id: string, action: "enable" | "disable" | "delete"): 
 async function deleteScopeSkill(id: string): Promise<void> {
   const key = `skill:${id}`;
   if (resourceBusy.has(key)) return;
-  if (!confirm("Delete this skill? This can't be undone.")) return;
+  if (!confirm("Hapus skill ini? Nggak bisa dibalikin.")) return;
   resourceBusy.add(key);
   drawContexts();
   try {
@@ -683,7 +683,7 @@ async function deleteScopeSkill(id: string): Promise<void> {
     const scope = contextsState.resourcesScope;
     if (scope) await loadScopeResources(scope);
   } catch (e) {
-    contextsState.resourcesNotice = errMessage(e, "Couldn't delete that skill.");
+    contextsState.resourcesNotice = errMessage(e, "Nggak bisa hapus skill itu.");
   } finally {
     resourceBusy.delete(key);
     drawContexts();
@@ -699,7 +699,7 @@ function resourceGroup(label: string, rows: TemplateResult[]): TemplateResult {
     <section class="context-panel context-resource-group">
       <div class="context-panel-heading context-resource-heading">
         <h2 class="context-panel-title">${label}</h2>
-        <a href=${href}>View all</a>
+        <a href=${href}>Lihat semua</a>
       </div>
       <div class="context-session-list">${rows}</div>
     </section>
@@ -720,7 +720,7 @@ function fileRow(f: ScopeFile): TemplateResult {
                 href=${withBase(`/api/files/${encodeURIComponent(f.id)}/content`)}
                 target="_blank"
                 rel="noreferrer"
-                >Open</a
+                >Buka</a
               >`
             : nothing
         }
@@ -730,9 +730,9 @@ function fileRow(f: ScopeFile): TemplateResult {
 }
 
 function cronRow(c: CronView, manage = false): TemplateResult {
-  let status = "disabled";
-  if (c.archived) status = "archived";
-  else if (c.enabled) status = "enabled";
+  let status = "nonaktif";
+  if (c.archived) status = "diarsip";
+  else if (c.enabled) status = "aktif";
   const busy = resourceBusy.has(`cron:${c.id}`);
   return html`
     <div class="context-session-row context-resource-row">
@@ -750,7 +750,7 @@ function cronRow(c: CronView, manage = false): TemplateResult {
                   ?disabled=${busy}
                   @click=${() => void manageCron(c.id, c.enabled ? "disable" : "enable")}
                 >
-                  ${c.enabled ? "Disable" : "Enable"}
+                  ${c.enabled ? "Matiin" : "Nyalain"}
                 </button>
                 <button
                   class="context-resource-action danger"
@@ -758,7 +758,7 @@ function cronRow(c: CronView, manage = false): TemplateResult {
                   ?disabled=${busy}
                   @click=${() => void manageCron(c.id, "delete")}
                 >
-                  Delete
+                  Hapus
                 </button>
               `
             : nothing
@@ -784,7 +784,7 @@ function skillRow(s: ScopeSkill, manage = false): TemplateResult {
                 ?disabled=${busy}
                 @click=${() => void deleteScopeSkill(s.id)}
               >
-                Delete
+                Hapus
               </button>`
             : nothing
         }
@@ -800,7 +800,7 @@ function deploymentRow(d: ScopeDeployment): TemplateResult {
       <span class="context-session-meta">
         <span class="badge">v${d.currentVersion}</span>
         <span class="badge">${d.status}</span>
-        <span class="badge">${d.permission === "write" ? "manage" : "read"}</span>
+        <span class="badge">${d.permission === "write" ? "kelola" : "baca"}</span>
       </span>
     </div>
   `;
@@ -841,26 +841,26 @@ function createProjectDialog(): TemplateResult | typeof nothing {
       <form @submit=${(event: SubmitEvent) => void createProject(event)}>
         <div class="project-dialog-head">
           <span class="context-glyph large">${icon(FolderPlus, 21)}</span>
-          <div><h2 id="project-dialog-title">New project</h2></div>
+          <div><h2 id="project-dialog-title">Proyek baru</h2></div>
           <button
             class="project-icon-button"
             type="button"
-            aria-label="Close new project"
-            title="Close"
+            aria-label="Tutup proyek baru"
+            title="Tutup"
             @click=${closeCreateProject}
           >
             ${icon(X, 16)}
           </button>
         </div>
         <label class="project-name-field" for="project-name">
-          <span>Name</span>
+          <span>Nama</span>
           <input
             id="project-name"
             data-focus-key="project-name"
             name="name"
             maxlength="200"
             autocomplete="off"
-            placeholder="launch cohort"
+            placeholder="tim peluncuran"
             .value=${contextsState.createName}
             ?disabled=${contextsState.createSaving}
             @input=${(event: InputEvent) => {
@@ -872,10 +872,10 @@ function createProjectDialog(): TemplateResult | typeof nothing {
         <div class="form-error" aria-live="polite">${contextsState.createError}</div>
         <div class="project-dialog-actions">
           <button class="btn" type="button" @click=${closeCreateProject}>
-            ${contextsState.createSaving ? "Close" : "Cancel"}
+            ${contextsState.createSaving ? "Tutup" : "Batal"}
           </button>
           <button class="btn primary" type="submit" ?disabled=${contextsState.createSaving}>
-            ${icon(FolderPlus, 15)}<span>${contextsState.createSaving ? "Creating…" : "Create project"}</span>
+            ${icon(FolderPlus, 15)}<span>${contextsState.createSaving ? "Membuat…" : "Buat proyek"}</span>
           </button>
         </div>
       </form>
@@ -943,7 +943,7 @@ async function createProject(event: SubmitEvent): Promise<void> {
   if (contextsState.createSaving) return;
   const name = contextsState.createName.trim();
   if (!name) {
-    contextsState.createError = "Enter a project name.";
+    contextsState.createError = "Masukin nama proyek.";
     drawContexts();
     queueMicrotask(() => document.querySelector<HTMLInputElement>("#project-name")?.focus());
     return;
@@ -955,7 +955,7 @@ async function createProject(event: SubmitEvent): Promise<void> {
   try {
     const project = projectFromResponse(await api("/api/projects", { method: "POST", body: JSON.stringify({ name }) }));
     if (resetSeq !== contextsResetSeq) return;
-    if (!project) throw new Error("Core returned an invalid project");
+    if (!project) throw new Error("Core ngembaliin proyek yang nggak valid");
     const loaded = contextsState.loaded;
     let context = upsertProject(project);
     if (!loaded) {
@@ -974,7 +974,7 @@ async function createProject(event: SubmitEvent): Promise<void> {
   } catch (error) {
     if (seq !== createProjectSeq || resetSeq !== contextsResetSeq) return;
     contextsState.createSaving = false;
-    contextsState.createError = errMessage(error, "Couldn't create that project.");
+    contextsState.createError = errMessage(error, "Nggak bisa buat proyek itu.");
     drawContexts();
     queueMicrotask(() => document.querySelector<HTMLInputElement>("#project-name")?.focus());
   }
@@ -1041,7 +1041,7 @@ async function searchProjectMembers(event: SubmitEvent, context: CoreContext): P
   if (query.length < 2) {
     contextsState.memberMatches = [];
     contextsState.memberSearchedQuery = "";
-    contextsState.memberError = "Enter at least two characters.";
+    contextsState.memberError = "Masukin minimal dua karakter.";
     drawContexts();
     return;
   }
@@ -1063,7 +1063,7 @@ async function runMemberSearch(context: CoreContext, query: string): Promise<voi
   } catch (error) {
     if (searchSeq !== memberSearchSeq || contextsState.memberProjectId !== projectId) return;
     contextsState.memberSearchedQuery = "";
-    contextsState.memberError = errMessage(error, "Couldn't search for people.");
+    contextsState.memberError = errMessage(error, "Nggak bisa nyari orang.");
   } finally {
     if (searchSeq === memberSearchSeq) {
       contextsState.memberSearching = false;
@@ -1088,14 +1088,14 @@ async function addProjectMember(context: CoreContext, member: DirectoryMatch): P
     });
     if (resetSeq !== contextsResetSeq) return;
     const project = projectFromResponse(response);
-    if (!project) throw new Error("Core returned an invalid project");
+    if (!project) throw new Error("Core ngembaliin proyek yang nggak valid");
     upsertProject(project);
     contextsState.memberQuery = "";
     contextsState.memberMatches = [];
     contextsState.memberSearchedQuery = "";
   } catch (error) {
     if (resetSeq !== contextsResetSeq) return;
-    contextsState.memberError = errMessage(error, "Couldn't add that person.");
+    contextsState.memberError = errMessage(error, "Nggak bisa nambah orang itu.");
   } finally {
     if (resetSeq === contextsResetSeq) {
       contextsState.memberBusy = false;
@@ -1107,7 +1107,7 @@ async function addProjectMember(context: CoreContext, member: DirectoryMatch): P
 async function removeProjectMember(context: CoreContext, principalId: string): Promise<void> {
   if (!context.project || contextsState.memberBusy) return;
   const label = memberLabel(context, principalId);
-  if (!window.confirm(`Remove ${label} from ${context.name || "this project"}?`)) return;
+  if (!window.confirm(`Hapus ${label} dari ${context.name || "proyek ini"}?`)) return;
   const resetSeq = contextsResetSeq;
   memberSearchSeq++;
   cancelMemberSearchTimer();
@@ -1122,11 +1122,11 @@ async function removeProjectMember(context: CoreContext, principalId: string): P
     );
     if (resetSeq !== contextsResetSeq) return;
     const project = projectFromResponse(response);
-    if (!project) throw new Error("Core returned an invalid project");
+    if (!project) throw new Error("Core ngembaliin proyek yang nggak valid");
     upsertProject(project);
   } catch (error) {
     if (resetSeq !== contextsResetSeq) return;
-    contextsState.memberError = errMessage(error, "Couldn't remove that person.");
+    contextsState.memberError = errMessage(error, "Nggak bisa hapus orang itu.");
   } finally {
     if (resetSeq === contextsResetSeq) {
       contextsState.memberBusy = false;
@@ -1156,7 +1156,7 @@ async function loadScopeResources(scopeId: string): Promise<void> {
     };
   } catch (e) {
     if (stale()) return;
-    contextsState.resourcesNotice = errMessage(e, "Failed to load this context's resources.");
+    contextsState.resourcesNotice = errMessage(e, "Gagal memuat resource konteks ini.");
   } finally {
     if (!stale()) {
       contextsState.resourcesLoading = false;
@@ -1173,7 +1173,7 @@ function contextSessionRow(s: CoreSession): TemplateResult {
       <span class="context-session-title">${groupDmTitle(s)}</span>
       <span class="context-session-meta">
         ${surface === "slack" ? html`<span class="surface surface-slack">${slackLogo(13)}</span>` : html`<span class="badge">${surface}</span>`}
-        ${readOnly ? html`<span class="ro-lock" title="Read-only — replies happen on the original surface">${icon(Lock, 12)}</span>` : nothing}
+        ${readOnly ? html`<span class="ro-lock" title="Read-only — balesannya muncul di tempat aslinya">${icon(Lock, 12)}</span>` : nothing}
         <span>${relTime(activityOf(s))}</span>
       </span>
     </button>

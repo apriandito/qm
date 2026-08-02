@@ -47,8 +47,8 @@ test("submit and debounce share runMemberSearch", () => {
 
 test("no-match searches render visible feedback", () => {
   assert.match(source, /memberSearchedQuery/);
-  assert.match(source, /No matches for/);
-  assert.match(source, /already in this project/);
+  assert.match(source, /Nggak ada yang cocok buat/);
+  assert.match(source, /udah ada di proyek ini/);
 });
 
 test("dismissing the picker cancels a pending debounced search", () => {

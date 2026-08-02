@@ -17,11 +17,11 @@ test("policy edits redraw immediately and preserve focused text controls", () =>
 });
 
 test("policy controls use product language and persistent accessible labels", () => {
-  for (const label of ["Ignore", "Batch updates", "Act immediately", "Treat like a person"])
+  for (const label of ["Abaikan", "Kumpulkan update", "Langsung bertindak", "Anggap seperti orang"])
     assert.match(policy, new RegExp(label));
   assert.match(policy, /<label class="ambient-field" for="ambient-orders">/);
   assert.match(policy, /aria-describedby="ambient-orders-hint"/);
-  assert.match(policy, /aria-label="Bot name"/);
+  assert.match(policy, /aria-label="Nama bot"/);
   assert.match(policy, /required/);
 });
 
@@ -42,7 +42,7 @@ test("policy styles use the shell theme contract", () => {
 
 test("the scope homepage puts work before settings and consolidates the empty project", () => {
   assert.match(contexts, /context-workspace-main[^]*?<aside class="context-settings"/);
-  assert.match(contexts, /This project is ready for work/);
+  assert.match(contexts, /Proyek ini siap dipakai/);
   assert.match(contexts, /if\s*\(\s*r\.files\.length === 0[^]*?return nothing;/);
 });
 

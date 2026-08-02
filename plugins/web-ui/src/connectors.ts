@@ -19,37 +19,37 @@ const CONNECTOR_LABELS: Record<string, { name: string; hosts: string; desc?: str
   google: {
     name: "Google Workspace",
     hosts: "Gmail, Calendar, Drive, Sheets",
-    desc: "Lets the agent read and act in your Gmail, Calendar, and Sheets on your behalf, and read your Drive (it can save new files there, but not edit your existing ones).",
+    desc: "Biar si agent bisa baca dan bertindak di Gmail, Calendar, dan Sheets kamu atas nama kamu, dan baca Drive kamu (bisa simpan file baru di situ, tapi nggak bisa ngedit file lama kamu).",
   },
   slack: {
     name: "Slack",
-    hosts: "Channels & messages",
-    desc: "Lets the agent act in Slack as you — read your channels and post messages on your behalf. (To chat with the agent in Slack, just DM it — you don't need this.)",
+    hosts: "Channel & pesan",
+    desc: "Biar si agent bisa bertindak di Slack sebagai kamu — baca channel kamu dan kirim pesan atas nama kamu. (Buat ngobrol sama si agent di Slack, DM aja langsung — nggak perlu ini.)",
   },
   notion: {
     name: "Notion",
-    hosts: "Pages & databases",
-    desc: "Lets the agent read the Notion pages and databases you share with it (and edit them if you grant that access).",
+    hosts: "Halaman & database",
+    desc: "Biar si agent bisa baca halaman dan database Notion yang kamu bagiin ke dia (dan ngedit kalau kamu kasih akses itu).",
   },
   linear: {
     name: "Linear",
-    hosts: "Issues & projects",
-    desc: "Lets the agent read and update your Linear issues on your behalf.",
+    hosts: "Issue & proyek",
+    desc: "Biar si agent bisa baca dan update issue Linear kamu atas nama kamu.",
   },
   github: {
     name: "GitHub",
-    hosts: "Repos, issues & PRs",
-    desc: "Lets the agent read and update your GitHub repos, issues, and PRs on your behalf.",
+    hosts: "Repo, issue & PR",
+    desc: "Biar si agent bisa baca dan update repo, issue, dan PR GitHub kamu atas nama kamu.",
   },
   dropbox: {
     name: "Dropbox",
-    hosts: "Files & folders",
-    desc: "Lets the agent browse, download, and upload files in your Dropbox on your behalf, and manage shared links.",
+    hosts: "File & folder",
+    desc: "Biar si agent bisa jelajah, download, dan upload file di Dropbox kamu atas nama kamu, dan ngatur shared link.",
   },
   x: {
     name: "X (Twitter)",
-    hosts: "Posts & profile",
-    desc: "Lets the agent read X and post, like, and follow as you — used when an action should come from your account rather than the org's.",
+    hosts: "Post & profil",
+    desc: "Biar si agent bisa baca X dan posting, like, dan follow sebagai kamu — dipakai kalau suatu aksi harusnya dari akun kamu, bukan dari akun org.",
   },
 };
 
@@ -169,9 +169,9 @@ function credentialCard(c: KeychainCredential): TemplateResult {
   const grants = keychainGrants.filter((grant) => grant.credentialId === c.id && isActiveGrant(grant, c));
   const asks = keychainAsks.filter((ask) => ask.credentialId === c.id);
   const lastUse = keychainUsage.find((usage) => usage.credentialId === c.id);
-  let added = "Encrypted at rest";
-  if (c.kind !== "file" && c.expiresAt) added = `Expires ${fmtDate(c.expiresAt)}`;
-  else if (c.createdAt) added = `Added ${fmtDate(c.createdAt)}`;
+  let added = "Terenkripsi saat disimpan";
+  if (c.kind !== "file" && c.expiresAt) added = `Kedaluwarsa ${fmtDate(c.expiresAt)}`;
+  else if (c.createdAt) added = `Ditambah ${fmtDate(c.createdAt)}`;
   return html`
     <article class="kc-resource kc-credential">
       <div class="kc-resource-main">
@@ -179,12 +179,12 @@ function credentialCard(c: KeychainCredential): TemplateResult {
         <div class="kc-resource-copy">
           <div class="kc-resource-title-row">
             <h3>${c.service}</h3>
-            ${expired ? html`<span class="kc-state warning">Expired</span>` : ""}
+            ${expired ? html`<span class="kc-state warning">Kedaluwarsa</span>` : ""}
           </div>
           ${subtitle ? html`<div class="kc-resource-meta">${subtitle}</div>` : ""}
           <div class="kc-credential-facts">
             <div class="kc-audit-line">
-              ${icon(Activity, 14)}${lastUse ? html`Last used ${fmtDate(lastUse.ts)} in ${scopeName(lastUse.scopeLabel)} · ${lastUse.status}` : "No audited use yet"}
+              ${icon(Activity, 14)}${lastUse ? html`Terakhir dipakai ${fmtDate(lastUse.ts)} di ${scopeName(lastUse.scopeLabel)} · ${lastUse.status}` : "Belum ada penggunaan yang tercatat"}
             </div>
             <div class="kc-resource-foot">${added}</div>
           </div>
@@ -196,20 +196,19 @@ function credentialCard(c: KeychainCredential): TemplateResult {
           ?disabled=${keychainOperations.mutationInFlight}
           @click=${() => void deleteCredential(c)}
         >
-          Delete
+          Hapus
         </button>
       </div>
       ${
         asks.length
           ? html`<div class="kc-access-block pending">
-              <div class="kc-access-label">Pending requests</div>
+              <div class="kc-access-label">Permintaan tertunda</div>
               ${asks.map(
                 (ask) =>
                   html`<div class="kc-access-row">
                     <div>
-                      <strong>${scopeName(ask.requesterScopeId)}</strong> requested ${ask.requestedMode ?? "one-time"}
-                      access
-                      <div>${ask.purpose} · expires ${fmtDate(ask.expiresAt)}</div>
+                      <strong>${scopeName(ask.requesterScopeId)}</strong> minta akses ${ask.requestedMode ?? "sekali"}
+                      <div>${ask.purpose} · kedaluwarsa ${fmtDate(ask.expiresAt)}</div>
                     </div>
                   </div>`,
               )}
@@ -219,13 +218,13 @@ function credentialCard(c: KeychainCredential): TemplateResult {
       ${
         grants.length
           ? html`<div class="kc-access-block">
-              <div class="kc-access-label">${icon(ShieldCheck, 14)} Active access</div>
+              <div class="kc-access-label">${icon(ShieldCheck, 14)} Akses aktif</div>
               ${grants.map(
                 (grant) =>
                   html` <div class="kc-access-row">
                     <div>
                       <strong>${scopeName(grant.audienceScopeId)}</strong> · ${grant.mode}
-                      <div>${grant.purpose}${grant.expiresAt ? ` · expires ${fmtDate(grant.expiresAt)}` : ""}</div>
+                      <div>${grant.purpose}${grant.expiresAt ? ` · kedaluwarsa ${fmtDate(grant.expiresAt)}` : ""}</div>
                     </div>
                     <button
                       class="kc-text-action"
@@ -234,7 +233,7 @@ function credentialCard(c: KeychainCredential): TemplateResult {
                       ?disabled=${keychainOperations.mutationInFlight}
                       @click=${() => void revokeGrant(grant)}
                     >
-                      Revoke
+                      Cabut
                     </button>
                   </div>`,
               )}
@@ -248,7 +247,7 @@ function credentialCard(c: KeychainCredential): TemplateResult {
 function scopeName(scope: string): string {
   const [kind, ...rest] = scope.split(":");
   const name = rest.join(":");
-  return `${kind ? kind.charAt(0).toUpperCase() + kind.slice(1) : "Context"}: ${name}`;
+  return `${kind ? kind.charAt(0).toUpperCase() + kind.slice(1) : "Konteks"}: ${name}`;
 }
 
 function addCredentialCard(): TemplateResult {
@@ -256,9 +255,9 @@ function addCredentialCard(): TemplateResult {
   return html`<section class="kc-add-card" aria-labelledby="kc-add-title">
     <div class="kc-panel-head">
       <div>
-        <span class="kc-eyebrow">Secure drop</span>
-        <h2 id="kc-add-title">Add a credential</h2>
-        <p>The secret goes directly to your encrypted keychain. It never enters chat or this page.</p>
+        <span class="kc-eyebrow">Drop aman</span>
+        <h2 id="kc-add-title">Tambah credential</h2>
+        <p>Secret-nya langsung masuk ke keychain terenkripsi kamu. Nggak pernah masuk ke chat atau halaman ini.</p>
       </div>
       <div class="kc-panel-icon">${icon(LockKeyhole, 20)}</div>
     </div>
@@ -266,10 +265,10 @@ function addCredentialCard(): TemplateResult {
       secureDropUrl
         ? html`
             <div class="kc-success" role="status">
-              <strong>Secure form ready</strong><span>Open it in a new tab to enter the credential.</span>
+              <strong>Secure form siap</strong><span>Buka di tab baru buat masukin credential-nya.</span>
             </div>
             <div class="kc-form-actions">
-              <a class="btn primary" href=${secureDropUrl} target="_blank" rel="noopener noreferrer">Open secure form</a
+              <a class="btn primary" href=${secureDropUrl} target="_blank" rel="noopener noreferrer">Buka secure form</a
               ><button
                 class="btn"
                 type="button"
@@ -279,14 +278,14 @@ function addCredentialCard(): TemplateResult {
                   drawConnectors();
                 }}
               >
-                Done
+                Selesai
               </button>
             </div>
           `
         : html`
             <div class="kc-form-grid">
               <label class="skill-field"
-                ><span>Service</span
+                ><span>Layanan</span
                 ><input
                   class="skill-desc-input"
                   placeholder="Stripe"
@@ -298,7 +297,7 @@ function addCredentialCard(): TemplateResult {
                   }}
               /></label>
               <label class="skill-field"
-                ><span>Environment variable <em>optional</em></span
+                ><span>Environment variable <em>opsional</em></span
                 ><input
                   class="skill-desc-input"
                   placeholder="STRIPE_API_KEY"
@@ -311,10 +310,10 @@ function addCredentialCard(): TemplateResult {
                   }}
               /></label>
               <label class="skill-field kc-purpose-field"
-                ><span>Purpose</span
+                ><span>Tujuan</span
                 ><input
                   class="skill-desc-input"
-                  placeholder="What may the agent use this credential for?"
+                  placeholder="Si agent boleh pakai credential ini buat apa?"
                   ?disabled=${keychainOperations.dropInFlight}
                   .value=${draft.purpose}
                   @input=${(e: Event) => {
@@ -333,14 +332,14 @@ function addCredentialCard(): TemplateResult {
                   drawConnectors();
                 }}
               >
-                Cancel</button
+                Batal</button
               ><button
                 class="btn primary"
                 type="button"
                 ?disabled=${keychainOperations.dropInFlight}
                 @click=${() => void createDrop()}
               >
-                ${keychainOperations.dropInFlight ? "Creating…" : "Create secure form"}
+                ${keychainOperations.dropInFlight ? "Membuat…" : "Buat secure form"}
               </button>
             </div>
           `
@@ -362,11 +361,11 @@ function confirmationCard(): TemplateResult {
       aria-describedby="kc-confirm-body"
       @keydown=${(event: KeyboardEvent) => trapDialogFocus(event, closeConfirmation)}
     >
-      <span class="kc-eyebrow danger">Check impact</span>
+      <span class="kc-eyebrow danger">Cek dampak</span>
       <h2 id="kc-confirm-title">${pending.title}</h2>
       <p id="kc-confirm-body">${pending.body}</p>
       <div class="kc-form-actions">
-        <button class="btn" type="button" data-dialog-cancel @click=${closeConfirmation}>Cancel</button
+        <button class="btn" type="button" data-dialog-cancel @click=${closeConfirmation}>Batal</button
         ><button class="btn danger" type="button" @click=${() => void pending.run()}>${pending.action}</button>
       </div>
     </article>
@@ -394,7 +393,7 @@ export function clearConnectorNotice(): void {
 
 export function noteConnectorResult(provider: string, status: string): void {
   const name = CONNECTOR_LABELS[provider]?.name ?? provider;
-  connectorNotice = status === "connected" ? `${name}: connected.` : `${name}: connection failed.`;
+  connectorNotice = status === "connected" ? `${name}: tersambung.` : `${name}: gagal nyambung.`;
 }
 
 function drawConnectors(loading = false): void {
@@ -425,8 +424,8 @@ function drawConnectors(loading = false): void {
       credentials.map((credential) => [credential.credentialId, { id: credential.credentialId, kind: "connector" }]),
     );
     const grants = keychainGrants.filter((grant) => isActiveGrant(grant, credentialsById.get(grant.credentialId)));
-    let connectionState: TemplateResult | string = html`<span class="kc-state neutral">Not connected</span>`;
-    if (needsReconnect) connectionState = html`<span class="kc-state warning">Reconnect needed</span>`;
+    let connectionState: TemplateResult | string = html`<span class="kc-state neutral">Belum tersambung</span>`;
+    if (needsReconnect) connectionState = html`<span class="kc-state warning">Perlu sambung ulang</span>`;
     else if (connected) connectionState = "";
     return html`
       <article class="kc-resource kc-account">
@@ -441,17 +440,19 @@ function drawConnectors(loading = false): void {
           </div>
         </div>
         ${meta.desc ? html`<p class="kc-resource-description">${meta.desc}</p>` : ""}
-        ${needsReconnect && p.refreshError ? html`<div class="kc-inline-warning" role="status">Refresh failed: ${p.refreshError}</div>` : ""}
+        ${needsReconnect && p.refreshError ? html`<div class="kc-inline-warning" role="status">Gagal refresh: ${p.refreshError}</div>` : ""}
         ${
           grants.length
             ? html`<div class="kc-access-block">
-                <div class="kc-access-label">${icon(ShieldCheck, 14)} Active access</div>
+                <div class="kc-access-label">${icon(ShieldCheck, 14)} Akses aktif</div>
                 ${grants.map(
                   (grant) =>
                     html` <div class="kc-access-row">
                       <div>
                         <strong>${scopeName(grant.audienceScopeId)}</strong> · ${grant.mode}
-                        <div>${grant.purpose}${grant.expiresAt ? ` · expires ${fmtDate(grant.expiresAt)}` : ""}</div>
+                        <div>
+                          ${grant.purpose}${grant.expiresAt ? ` · kedaluwarsa ${fmtDate(grant.expiresAt)}` : ""}
+                        </div>
                       </div>
                       <button
                         class="kc-text-action"
@@ -460,7 +461,7 @@ function drawConnectors(loading = false): void {
                         ?disabled=${keychainOperations.mutationInFlight}
                         @click=${() => void revokeGrant(grant)}
                       >
-                        Revoke
+                        Cabut
                       </button>
                     </div>`,
                 )}
@@ -468,8 +469,8 @@ function drawConnectors(loading = false): void {
             : ""
         }
         <div class="kc-resource-actions">
-          ${available ? html`<button class="btn" type="button" @click=${() => void startConnector(id)}>${connected || needsReconnect ? "Reconnect" : "Connect account"}</button>` : ""}
-          ${connected || needsReconnect ? html`<button class="kc-text-action danger" type="button" data-confirm-key=${`disconnect:${id}`} ?disabled=${keychainOperations.mutationInFlight} @click=${() => void revokeConnector(id)}>Disconnect</button>` : ""}
+          ${available ? html`<button class="btn" type="button" @click=${() => void startConnector(id)}>${connected || needsReconnect ? "Sambung ulang" : "Sambungin akun"}</button>` : ""}
+          ${connected || needsReconnect ? html`<button class="kc-text-action danger" type="button" data-confirm-key=${`disconnect:${id}`} ?disabled=${keychainOperations.mutationInFlight} @click=${() => void revokeConnector(id)}>Putusin</button>` : ""}
         </div>
       </article>
     `;
@@ -483,9 +484,11 @@ function drawConnectors(loading = false): void {
         <header class="kc-hero">
           <div class="kc-hero-copy">
             <h1>Keychain</h1>
-            <p>Accounts and credentials your agent may use on your behalf.</p>
+            <p>Akun dan credential yang boleh dipakai si agent atas nama kamu.</p>
             <div class="kc-trust-note">
-              ${icon(ShieldCheck, 14)}<span>Secrets stay encrypted and every use or shared grant is audited.</span>
+              ${icon(ShieldCheck, 14)}<span
+                >Secret tetap terenkripsi dan tiap penggunaan atau grant yang dibagi dicatat.</span
+              >
             </div>
           </div>
           <div class="kc-hero-actions">
@@ -498,13 +501,13 @@ function drawConnectors(loading = false): void {
                 drawConnectors();
               }}
             >
-              ${icon(Plus, 16)} Add credential
+              ${icon(Plus, 16)} Tambah credential
             </button>
             <button
               class="pane-refresh"
               type="button"
-              aria-label="Refresh keychain"
-              title="Refresh keychain"
+              aria-label="Muat ulang keychain"
+              title="Muat ulang keychain"
               @click=${() => {
                 connectorNotice = "";
                 void renderConnectors();
@@ -514,23 +517,23 @@ function drawConnectors(loading = false): void {
             </button>
           </div>
         </header>
-        <div class="kc-summary" aria-label="Keychain summary">
-          <div><span>${loading ? "—" : summary.connected}</span><small>Connected accounts</small></div>
-          <div><span>${loading ? "—" : keychainCredentials.length}</span><small>Stored credentials</small></div>
-          <div><span>${loading ? "—" : summary.activeGrants}</span><small>Active grants</small></div>
+        <div class="kc-summary" aria-label="Ringkasan keychain">
+          <div><span>${loading ? "—" : summary.connected}</span><small>Akun tersambung</small></div>
+          <div><span>${loading ? "—" : keychainCredentials.length}</span><small>Credential tersimpan</small></div>
+          <div><span>${loading ? "—" : summary.activeGrants}</span><small>Grant aktif</small></div>
           <div class=${summary.attention ? "needs-attention" : ""}>
-            <span>${loading ? "—" : summary.attention}</span><small>Need attention</small>
+            <span>${loading ? "—" : summary.attention}</span><small>Perlu perhatian</small>
           </div>
         </div>
-        ${connectorNotice || loading ? html`<div class="kc-notice" role="status">${loading ? "Loading your keychain…" : connectorNotice}</div>` : ""}
+        ${connectorNotice || loading ? html`<div class="kc-notice" role="status">${loading ? "Memuat keychain kamu…" : connectorNotice}</div>` : ""}
         ${addingCredential ? addCredentialCard() : ""}
         <section class="kc-section" aria-labelledby="kc-accounts-title">
           <div class="kc-section-head">
             <div class="kc-section-title">
-              <h2 id="kc-accounts-title">Linked accounts</h2>
+              <h2 id="kc-accounts-title">Akun terhubung</h2>
               <span>${entries.length}</span>
             </div>
-            <p>Provider APIs the agent can use as you.</p>
+            <p>API provider yang bisa dipakai si agent sebagai kamu.</p>
           </div>
           <div class="kc-resource-list">
             ${
@@ -539,8 +542,7 @@ function drawConnectors(loading = false): void {
                 : html`<div class="kc-empty">
                     ${icon(Link, 20)}
                     <div>
-                      <strong>No accounts available</strong
-                      ><span>Your workspace has not configured any account providers yet.</span>
+                      <strong>Belum ada akun</strong><span>Workspace kamu belum nyetting provider akun apa pun.</span>
                     </div>
                   </div>`
             }
@@ -549,10 +551,10 @@ function drawConnectors(loading = false): void {
         <section class="kc-section" aria-labelledby="kc-credentials-title">
           <div class="kc-section-head">
             <div class="kc-section-title">
-              <h2 id="kc-credentials-title">Stored credentials</h2>
+              <h2 id="kc-credentials-title">Credential tersimpan</h2>
               <span>${keychainCredentials.length}</span>
             </div>
-            <p>API keys, tokens, and files added through a one-time secure form.</p>
+            <p>API key, token, dan file yang ditambah lewat secure form sekali pakai.</p>
           </div>
           <div class="kc-resource-list">
             ${
@@ -561,7 +563,8 @@ function drawConnectors(loading = false): void {
                 : html`<div class="kc-empty">
                     ${icon(KeyRound, 20)}
                     <div>
-                      <strong>No stored credentials</strong><span>Add one without pasting a secret into chat.</span>
+                      <strong>Belum ada credential tersimpan</strong
+                      ><span>Tambahin tanpa perlu nempel secret ke chat.</span>
                     </div>
                     <button
                       class="btn"
@@ -572,7 +575,7 @@ function drawConnectors(loading = false): void {
                         drawConnectors();
                       }}
                     >
-                      Add credential
+                      Tambah credential
                     </button>
                   </div>`
             }
@@ -611,7 +614,7 @@ export async function renderConnectors(): Promise<void> {
     );
   } else {
     connectorProviders = {};
-    notices.push(errMessage(conn.reason, "Failed to load connectors."));
+    notices.push(errMessage(conn.reason, "Gagal memuat connector."));
   }
   if (keys.status === "fulfilled") {
     keychainCredentials = (keys.value.credentials ?? []).slice().sort((a, b) => a.service.localeCompare(b.service));
@@ -625,7 +628,7 @@ export async function renderConnectors(): Promise<void> {
     keychainGrants = [];
     keychainAsks = [];
     keychainUsage = [];
-    notices.push(errMessage(keys.reason, "Failed to load stored keys."));
+    notices.push(errMessage(keys.reason, "Gagal memuat credential tersimpan."));
   }
   if (notices.length) connectorNotice = notices.join(" ");
   drawConnectors(false);
@@ -636,13 +639,13 @@ async function deleteCredential(credential: KeychainCredential): Promise<void> {
     (grant) => grant.credentialId === credential.id && isActiveGrant(grant, credential),
   );
   const impact = active.length
-    ? ` It will immediately revoke ${active.length} active grant${active.length === 1 ? "" : "s"}: ${active.map((grant) => scopeName(grant.audienceScopeId)).join(", ")}.`
+    ? ` Ini bakal langsung nyabut ${active.length} grant aktif: ${active.map((grant) => scopeName(grant.audienceScopeId)).join(", ")}.`
     : "";
   confirmationOpener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   confirmation = {
-    title: `Delete ${credential.service}?`,
-    body: `${impact} Automations using it may stop working. The credential cannot be recovered.`.trim(),
-    action: "Delete credential",
+    title: `Hapus ${credential.service}?`,
+    body: `${impact} Otomasi yang pakai ini mungkin berhenti jalan. Credential-nya nggak bisa dibalikin.`.trim(),
+    action: "Hapus credential",
     run: async () => {
       const operation = beginKeychainMutation();
       if (!operation) return;
@@ -664,7 +667,7 @@ function beginKeychainMutation() {
   if (operation) return operation;
   confirmation = null;
   confirmationOpener = null;
-  connectorNotice = "Another keychain change is still in progress.";
+  connectorNotice = "Masih ada perubahan keychain lain yang lagi jalan.";
   drawConnectors();
   return null;
 }
@@ -674,7 +677,8 @@ async function performDeleteCredential(credential: KeychainCredential, stateEpoc
   try {
     await api(`/api/keychain/credentials/${encodeURIComponent(credential.id)}`, { method: "DELETE" });
   } catch (e) {
-    if (keychainOperations.isCurrentEpoch(stateEpoch)) connectorNotice = errMessage(e, "Could not delete the key.");
+    if (keychainOperations.isCurrentEpoch(stateEpoch))
+      connectorNotice = errMessage(e, "Nggak bisa hapus credential-nya.");
   }
   if (keychainOperations.isCurrentEpoch(stateEpoch)) await renderConnectors();
 }
@@ -682,9 +686,9 @@ async function performDeleteCredential(credential: KeychainCredential, stateEpoc
 async function revokeGrant(grant: KeychainGrant): Promise<void> {
   confirmationOpener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   confirmation = {
-    title: `Revoke access for ${scopeName(grant.audienceScopeId)}?`,
-    body: `This ${grant.mode === "standing" ? "standing" : "one-time"} access ends immediately. Automations using it may stop working.`,
-    action: "Revoke access",
+    title: `Cabut akses buat ${scopeName(grant.audienceScopeId)}?`,
+    body: `Akses ${grant.mode === "standing" ? "berkelanjutan" : "sekali"} ini langsung berakhir. Otomasi yang pakai ini mungkin berhenti jalan.`,
+    action: "Cabut akses",
     run: async () => {
       const operation = beginKeychainMutation();
       if (!operation) return;
@@ -704,9 +708,9 @@ async function revokeGrant(grant: KeychainGrant): Promise<void> {
 async function performRevokeGrant(id: string, stateEpoch: number): Promise<void> {
   try {
     await api(`/api/keychain/grants/${encodeURIComponent(id)}/revoke`, { method: "POST", body: "{}" });
-    if (keychainOperations.isCurrentEpoch(stateEpoch)) connectorNotice = "Access revoked ✓";
+    if (keychainOperations.isCurrentEpoch(stateEpoch)) connectorNotice = "Akses dicabut ✓";
   } catch (e) {
-    if (keychainOperations.isCurrentEpoch(stateEpoch)) connectorNotice = errMessage(e, "Could not revoke access.");
+    if (keychainOperations.isCurrentEpoch(stateEpoch)) connectorNotice = errMessage(e, "Nggak bisa cabut akses.");
   }
   if (keychainOperations.isCurrentEpoch(stateEpoch)) await renderConnectors();
 }
@@ -714,7 +718,7 @@ async function performRevokeGrant(id: string, stateEpoch: number): Promise<void>
 async function createDrop(): Promise<void> {
   if (keychainOperations.dropInFlight) return;
   if (!addingCredential?.service.trim() || !addingCredential.purpose.trim()) {
-    connectorNotice = "Service and purpose are required.";
+    connectorNotice = "Layanan dan tujuan wajib diisi.";
     return drawConnectors();
   }
   const submittedDraft = { ...addingCredential };
@@ -727,12 +731,12 @@ async function createDrop(): Promise<void> {
       body: JSON.stringify(submittedDraft),
     });
     if (!keychainOperations.isCurrentEpoch(stateEpoch)) return;
-    if (!result.url) throw new Error("No secure form URL was returned.");
+    if (!result.url) throw new Error("Nggak ada URL secure form yang dikembaliin.");
     secureDropUrl = result.url;
-    connectorNotice = "Secure credential form ready.";
+    connectorNotice = "Secure form credential siap.";
   } catch (e) {
     if (!keychainOperations.isCurrentEpoch(stateEpoch)) return;
-    connectorNotice = errMessage(e, "Could not create the secure form.");
+    connectorNotice = errMessage(e, "Nggak bisa buat secure form-nya.");
   } finally {
     if (keychainOperations.isCurrentEpoch(stateEpoch)) {
       keychainOperations.finishDrop(stateEpoch);
@@ -753,10 +757,10 @@ async function startConnector(provider: string): Promise<void> {
       location.href = r.authorizeUrl;
       return;
     }
-    connectorNotice = "No authorization URL was returned.";
+    connectorNotice = "Nggak ada URL otorisasi yang dikembaliin.";
   } catch (e) {
     if (!keychainOperations.isCurrentEpoch(stateEpoch)) return;
-    connectorNotice = errMessage(e, "Could not start the connector.");
+    connectorNotice = errMessage(e, "Nggak bisa mulai connector-nya.");
   }
   drawConnectors(false);
 }
@@ -779,13 +783,13 @@ async function revokeConnector(provider: string): Promise<void> {
     (grant) => credentialIds.has(grant.credentialId) && isActiveGrant(grant, credentialsById.get(grant.credentialId)),
   );
   const impact = active.length
-    ? ` It will also stop ${active.length} active credential grant${active.length === 1 ? "" : "s"} for this account.`
+    ? ` Ini juga bakal ngehentiin ${active.length} grant credential aktif buat akun ini.`
     : "";
   confirmationOpener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   confirmation = {
-    title: `Disconnect ${CONNECTOR_LABELS[provider]?.name ?? provider}?`,
-    body: `${impact} Automations using this account may stop working.`.trim(),
-    action: "Disconnect account",
+    title: `Putusin ${CONNECTOR_LABELS[provider]?.name ?? provider}?`,
+    body: `${impact} Otomasi yang pakai akun ini mungkin berhenti jalan.`.trim(),
+    action: "Putusin akun",
     run: async () => {
       const operation = beginKeychainMutation();
       if (!operation) return;
@@ -807,7 +811,7 @@ async function performRevokeConnector(provider: string, stateEpoch: number): Pro
   try {
     await api("/api/connectors/revoke", { method: "POST", body: JSON.stringify({ provider }) });
   } catch (e) {
-    if (keychainOperations.isCurrentEpoch(stateEpoch)) connectorNotice = errMessage(e, "Could not disconnect.");
+    if (keychainOperations.isCurrentEpoch(stateEpoch)) connectorNotice = errMessage(e, "Nggak bisa putusin.");
   }
   if (keychainOperations.isCurrentEpoch(stateEpoch)) await renderConnectors();
 }

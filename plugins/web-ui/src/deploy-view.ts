@@ -92,9 +92,9 @@ export function deploymentTab(d: DeploymentView, viewer: string | undefined): De
 }
 
 export function deploymentTabEmptyMessage(tab: DeploymentTab): string {
-  if (tab === "shared") return "No apps shared with you.";
-  if (tab === "archived") return "Nothing archived.";
-  return "No apps in Yours.";
+  if (tab === "shared") return "Belum ada app yang dibagikan ke kamu.";
+  if (tab === "archived") return "Belum ada yang diarsipkan.";
+  return "Belum ada app di Punya kamu.";
 }
 
 export function filterDeployments(
@@ -124,7 +124,7 @@ export function filterDeployments(
 
 export function friendlyPrincipal(principal: string | undefined): string {
   const local = (principal ?? "").split("@")[0]!.trim();
-  if (!local) return "Unknown owner";
+  if (!local) return "Pemilik nggak diketahui";
   return local
     .split(/[._-]+/)
     .filter(Boolean)
