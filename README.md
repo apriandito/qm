@@ -17,7 +17,7 @@ instruksi lewat chat, dan agent yang mengerjakannya.
 - [Deploy untuk organisasi](#deploy-untuk-organisasi)
 - [Cek kesiapan sebagai coding agent](#cek-kesiapan-sebagai-coding-agent)
 - [Keamanan](#keamanan)
-- [Arsitektur](#arsitektur)
+- [Cara kerja di balik layar](#cara-kerja-di-balik-layar)
 - [Lisensi](#lisensi)
 
 ## Apa itu Agent Inovasi
@@ -162,34 +162,25 @@ Command policy (aturan approval dan larangan keras seperti `rm -rf` atau SQL des
 berlaku di semua posture. Detail model ancaman, asumsi operator, dan batasan yang
 diketahui ada di [`SECURITY.md`](./SECURITY.md).
 
-## Arsitektur
+## Cara kerja di balik layar
 
-```mermaid
-flowchart LR
-  DB[("Postgres<br/>sessions · memory · queue")]
+Alurnya sederhana:
 
-  subgraph CORE["Headless core"]
-    API["API · identity · policy · scheduler"]
-    LOOP["Agent loop<br/>(Pi, OpenCode, Codex, Claude Code)"]
-    API <--> LOOP
-  end
+1. Kamu memberi permintaan lewat **web** atau **Slack**.
+2. Permintaan masuk ke satu **pusat (core)** yang mengatur identitas, izin, dan jadwal.
+3. Untuk menjalankan perintah, agent memakai **komputer sendiri yang aman dan terpisah** (disebut sandbox).
+4. Semua data (akun, riwayat chat, dan hal yang perlu diingat) tersimpan di **database Postgres**.
 
-  SBX["Sandbox per-scope<br/>files · tools · logins"]
+Web, admin, dan Slack hanyalah pintu masuk ke pusat yang sama, jadi identitas dan
+pengaturan kamu tetap konsisten di mana pun kamu mengaksesnya.
 
-  DB <--> API
-  LOOP <--> SBX
-```
+Komputer agent (sandbox) sudah berisi alat pengembang seperti git, Node, dan Python,
+sehingga agent bisa langsung menyalin kode, mengubah, menguji, lalu menyimpannya. Kamu
+juga bebas memilih model dan harness (mesin yang menjalankan agent) tanpa mengubah bagian
+lain.
 
-Setiap turn melewati satu core terpusat yang bisa memakai berbagai model dan harness.
-Postgres menyimpan data pengguna, riwayat sesi, dan state durable lain. Agent punya tool
-surface yang kecil dan tetap; salah satunya `execute`, yang menjalankan perintah di
-**sandbox Linux terisolasi** milik scope (komputer durable-nya, tempat tools yang
-di-install tetap terpasang). Web UI, admin, dan portal adalah plugin opsional di atas HTTP
-API core; Slack adalah plugin in-process opsional.
-
-Core berjalan langsung di Node (TypeScript) dengan Fastify. Web UI dibangun dengan Vite +
-Lit. Sandbox agent sudah dilengkapi dev tools (git, Node, Python, dll.), jadi agent bisa
-langsung clone, edit, test, lalu commit.
+Secara teknis, semuanya berjalan di Node (TypeScript), jadi mudah dijalankan dan
+di-deploy.
 
 ## Lisensi
 
