@@ -1,25 +1,25 @@
 # Quickstart: menjalankan Agent Inovasi secara lokal
 
-Jalankan Agent Inovasi di mesin kamu sendiri dengan satu perintah. Chat UI,
+Jalankan Agent Inovasi di mesin sendiri dengan satu perintah. Chat UI,
 admin panel, model (DeepSeek), Postgres, dan sandbox agent semuanya sudah terhubung.
 
 ## Yang perlu disiapkan
 
 - **Node.js ≥ 24.15**: periksa dengan `node --version` (install lewat `nvm install 24`)
-- **Docker** yang berjalan, dipakai untuk sandbox terisolasi milik agent dan untuk Postgres
+- **Docker** yang berjalan, digunakan untuk sandbox terisolasi milik agent dan untuk Postgres
 - Sebuah **DeepSeek API key** dari [platform.deepseek.com](https://platform.deepseek.com)
 
 ## Menjalankan
 
 ```bash
-git clone <repo Agent Inovasi kamu>
+git clone <repo Agent Inovasi>
 cd agent-inovasi
 npm install
 npm run quickstart
 ```
 
-Saat pertama kali dijalankan, perintah ini menanyakan DeepSeek API key kamu (disimpan
-lokal di `.env.quickstart`, yang sudah gitignored), lalu:
+Saat pertama kali dijalankan, perintah ini menanyakan DeepSeek API key (disimpan lokal di
+`.env.quickstart`, yang sudah gitignored), lalu:
 
 1. Memeriksa Node dan Docker
 2. Membuat secret lokal dan menjalankan container Postgres
@@ -27,7 +27,7 @@ lokal di `.env.quickstart`, yang sudah gitignored), lalu:
 4. Menjalankan core, chat UI, dan admin panel
 5. Menampilkan URL
 
-Setelah selesai, kamu akan melihat:
+Setelah selesai, akan tampil:
 
 ```
 ✓ Agent Inovasi is running.
@@ -56,13 +56,13 @@ Setelah selesai, kamu akan melihat:
 
 ## Menghentikan
 
-- `Ctrl-C` menghentikan service. Postgres tetap berjalan agar data kamu tetap ada setelah restart.
+- `Ctrl-C` menghentikan service. Postgres tetap berjalan agar data tetap ada setelah restart.
 - `npm run quickstart:down` menghapus container Postgres (volume datanya tetap disimpan;
   `docker volume rm agent-inovasi-pgdata` menghapusnya).
 
 ## Konfigurasi
 
-Semuanya berjalan dengan nilai default. Ubah lewat environment variable bila perlu:
+Semuanya berjalan dengan nilai default. Nilai default dapat diubah lewat environment variable bila perlu:
 
 | Variable                | Default        | Kegunaan                                      |
 | ----------------------- | -------------- | --------------------------------------------- |
@@ -78,16 +78,16 @@ Semuanya berjalan dengan nilai default. Ubah lewat environment variable bila per
 
 - **"needs Node ≥ 24.15"**: upgrade Node (`nvm install 24 && nvm use 24`).
 - **"Docker … not reachable"**: jalankan Docker Desktop atau service docker.
-- **"Could not start Postgres … port already in use"**: set `QUICKSTART_DB_PORT` ke port
+- **"Could not start Postgres … port already in use"**: atur `QUICKSTART_DB_PORT` ke port
   yang bebas, lalu jalankan ulang.
-- **Build image sandbox gagal**: chat UI tetap terbuka, tetapi agent belum bisa
+- **Build image sandbox gagal**: chat UI tetap terbuka, tetapi agent belum dapat
   menjalankan perintah sampai `npm run sandbox:local:build` berhasil (butuh Docker dan jaringan).
 
 ## Batasan setup lokal
 
 Ini adalah setup satu mesin untuk satu operator, untuk mencoba dan self-host Agent
 Inovasi. Setup ini sengaja melewati sign-in portal produksi dan TLS, yang sekaligus
-mematikan signed control plane. Di mode lokal ini agent bisa chat dan menjalankan
+mematikan signed control plane. Di mode lokal ini agent dapat chat dan menjalankan
 perintah di sandbox-nya, tetapi hal berikut **dinonaktifkan**: cron dan reminder
 terjadwal, tool yang autentikasi lewat OAuth connector, serta publishing web app.
 Semua itu membutuhkan signed deployment. Untuk deployment publik dan multi-user dengan
