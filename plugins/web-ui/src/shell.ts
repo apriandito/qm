@@ -243,8 +243,8 @@ export async function exitImpersonation(): Promise<void> {
 function impersonationBanner(by: string) {
   return html`
     <div class="top-banner" role="status">
-      <span>Viewing the assistant as <b>${appState.me?.user ?? ""}</b> — you are <b>${by}</b></span>
-      <button class="top-banner-action" type="button" @click=${exitImpersonation}>Exit impersonation</button>
+      <span>Melihat asisten sebagai <b>${appState.me?.user ?? ""}</b> — kamu adalah <b>${by}</b></span>
+      <button class="top-banner-action" type="button" @click=${exitImpersonation}>Keluar dari impersonation</button>
     </div>
   `;
 }
@@ -252,8 +252,8 @@ function impersonationBanner(by: string) {
 function devBanner(user: string) {
   return html`
     <div class="top-banner dev" role="status">
-      <span><b>Dev mode</b> — no identity provider, signed in as ${user}</span>
-      <button class="top-banner-action" type="button" @click=${signOut}>Sign out</button>
+      <span><b>Mode dev</b> — tanpa identity provider, masuk sebagai ${user}</span>
+      <button class="top-banner-action" type="button" @click=${signOut}>Keluar</button>
     </div>
   `;
 }
@@ -305,32 +305,34 @@ function clearPortalAttempt(): void {
 function portalGate() {
   if (portalAttemptedRecently())
     return gateShell(html`
-      <h1>Sign in through the portal</h1>
+      <h1>Masuk lewat portal</h1>
       <p class="signin-body">
-        This surface is reached through the portal, and signing in there didn't produce a session for it. Open the
-        portal address directly rather than this one.
+        Halaman ini diakses lewat portal, dan masuk di sana tidak menghasilkan sesi untuk halaman ini. Buka alamat
+        portal langsung, bukan alamat ini.
       </p>
       <div class="hint">
-        If you opened this surface's own address, that's the cause — it can't authenticate anyone on its own.
+        Kalau kamu membuka alamat halaman ini sendiri, itu penyebabnya — halaman ini tidak bisa mengautentikasi siapa
+        pun sendiri.
       </div>
     `);
   return gateShell(html`
-    <h1>Your session ended</h1>
-    <p class="signin-body">You've been signed out. Sign in again and you'll come back to this page.</p>
-    <button class="btn primary" type="button" @click=${signInWithPortal}>Sign in</button>
+    <h1>Sesi kamu berakhir</h1>
+    <p class="signin-body">Kamu sudah keluar. Masuk lagi dan kamu akan kembali ke halaman ini.</p>
+    <button class="btn primary" type="button" @click=${signInWithPortal}>Masuk</button>
   `);
 }
 
 function deniedGate() {
   return gateShell(html`
-    <h1>You don't have access</h1>
+    <h1>Kamu tidak punya akses</h1>
     <p class="signin-body">
-      Your account is signed in and verified — it just isn't allowed on this instance. Ask an administrator to add you.
+      Akun kamu sudah masuk dan terverifikasi — hanya saja belum diizinkan di instance ini. Minta administrator
+      menambahkan kamu.
     </p>
-    <button class="btn" type="button" @click=${signOut}>Sign out</button>
+    <button class="btn" type="button" @click=${signOut}>Keluar</button>
     ${
       authMode === "dev"
-        ? html`<div class="hint">This instance lists its principals in <b>WEB_UI_PRINCIPALS</b>.</div>`
+        ? html`<div class="hint">Instance ini mendaftar principal-nya di <b>WEB_UI_PRINCIPALS</b>.</div>`
         : nothing
     }
   `);
@@ -342,10 +344,10 @@ function retryBoot(): void {
 
 function unreachableGate() {
   return gateShell(html`
-    <h1>We couldn't reach the assistant</h1>
-    <p class="signin-body">The service didn't respond. This is usually temporary.</p>
-    <button class="btn primary" type="button" @click=${retryBoot}>Try again</button>
-    <div class="hint">If this keeps happening, the core service may be down.</div>
+    <h1>Tidak bisa menghubungi asisten</h1>
+    <p class="signin-body">Layanan tidak merespons. Biasanya ini sementara.</p>
+    <button class="btn primary" type="button" @click=${retryBoot}>Coba lagi</button>
+    <div class="hint">Kalau terus terjadi, layanan core mungkin sedang down.</div>
   `);
 }
 
@@ -354,7 +356,7 @@ async function submitDevSignin(user: string): Promise<void> {
   try {
     await api("/signin", { method: "POST", body: JSON.stringify({ user }) });
   } catch (err) {
-    renderAuthGate({ kind: "dev", value: user, error: errMessage(err, "Sign-in failed.") });
+    renderAuthGate({ kind: "dev", value: user, error: errMessage(err, "Gagal masuk.") });
     return;
   }
   await bootSafely();
@@ -371,10 +373,10 @@ function devGate(gate: { value?: string; error?: string; pending?: boolean }) {
         if (user) void submitDevSignin(user);
       }}
     >
-      <h1>Dev sign-in</h1>
+      <h1>Masuk (dev)</h1>
       <p class="signin-body">
-        No identity provider is configured, so this instance trusts a local cookie. Set
-        <b>CORE_SIGNING_SECRET</b> and run the portal to use real sign-in.
+        Belum ada identity provider yang dikonfigurasi, jadi instance ini memakai cookie lokal. Set
+        <b>CORE_SIGNING_SECRET</b> dan jalankan portal untuk masuk secara sungguhan.
       </p>
       <label for="dev-principal">Principal</label>
       <input
@@ -391,7 +393,7 @@ function devGate(gate: { value?: string; error?: string; pending?: boolean }) {
         ?disabled=${gate.pending === true}
       />
       <button class="btn primary" type="submit" ?disabled=${gate.pending === true}>
-        ${gate.pending ? "Signing in…" : "Continue"}
+        ${gate.pending ? "Sedang masuk…" : "Lanjut"}
       </button>
       ${gate.error ? html`<div class="hint error" role="alert">${gate.error}</div>` : nothing}
     </form>

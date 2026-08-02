@@ -301,9 +301,9 @@ export function composerForm(agent: Agent): TemplateResult {
   const modelToggled = !runtimePending && selectedModel.value !== defaultModelValue();
   const inputBlocked = runtimePending || chatState.resolvingApprovals.size > 0 || approvalPauses.length > 0;
   const attachingDisabled = inputBlocked || agent.state.isStreaming;
-  let placeholder = "Ask anything";
-  if (inputBlocked) placeholder = runtimePending ? "Loading runtime…" : "Approve or deny to continue";
-  else if (agent.state.isStreaming) placeholder = "Steer the running task…";
+  let placeholder = "Tanya apa saja";
+  if (inputBlocked) placeholder = runtimePending ? "Memuat runtime…" : "Setujui atau tolak untuk lanjut";
+  else if (agent.state.isStreaming) placeholder = "Arahkan task yang sedang jalan…";
   let composerNotice: TemplateResult | typeof nothing = nothing;
   if (composerState.processingFiles) {
     composerNotice = html`<div class="composer-note">Preparing files...</div>`;

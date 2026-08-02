@@ -44,7 +44,7 @@ test("rapid copy feedback restores the original button markup once", async () =>
     const original = button.innerHTML;
     await copyText("first", button);
     await copyText("second", button);
-    assert.equal(button.textContent, "Copied");
+    assert.equal(button.textContent, "Tersalin");
     await new Promise((resolve) => setTimeout(resolve, 1250));
     assert.equal(button.innerHTML, original);
   } finally {

@@ -72,7 +72,7 @@ export async function copyText(text: string, btn?: HTMLButtonElement): Promise<v
       const active = copyFeedback.get(btn);
       if (active) clearTimeout(active.timer);
       const html = active?.html ?? btn.innerHTML;
-      btn.textContent = "Copied";
+      btn.textContent = "Tersalin";
       const timer = setTimeout(() => {
         btn.innerHTML = html;
         copyFeedback.delete(btn);

@@ -105,68 +105,68 @@ function version(): string {
 
 const CLI_NAME = "qm";
 
-const HELP = `${bold(CLI_NAME)} — control-plane CLI for a QM deployment
+const HELP = `${bold(CLI_NAME)} — CLI control-plane untuk deployment Agent Inovasi
 
-${bold("USAGE")}
+${bold("PENGGUNAAN")}
   ${CLI_NAME} <command> [options]
   ${CLI_NAME} help | version
 
-${bold("DEPLOY (operator)")} ${dim("— runs in the deployment directory")}
+${bold("DEPLOY (operator)")} ${dim("— dijalankan di direktori deployment")}
   init [path] [--org <id>] [--target ${HOSTING_PROVIDER_IDS.join("|")}]
        [--model-provider ${MODEL_PROVIDERS.join("|")}]
        [--email-transport ${EMAIL_TRANSPORTS.join("|")}]
-                                           scaffold a deployment directory (the base model
-                                           provider defaults to anthropic; its API key is a
-                                           required secret; sign-in emails default to resend,
-                                           and only the chosen transport's keys are scaffolded)
-  setup [path]                             interactive wizard: scaffold if needed, then walk the
-                                           missing secrets with per-provider instructions
-  up                                       build images and bring the deployment up
-     --build-from[=<qm-repo>]              build from local Dockerfiles instead of pulling
-     --dry-run                             resolve the config + report the plan, change nothing
-  plan                                     an alias for up --dry-run
-  check                                    validate config + sandbox/ (skills & tools); no build; verifies
-                                           provider credentials whose values are present locally
-    --json                                 machine-readable results keyed by contract clause
-    --live                                 verify running identity, rendered config, and health
-  doctor                                   verify deployment prerequisites read-only
-  config get <dot.path>                    print one config value (raw scalar, JSON otherwise)
-  slack render                             render the bot manifest (+ SSO manifest for Slack OIDC)
-  outputs [--json]                         print the Web UI, health, and Slack app creation links
-  proof scope-key <scope-id>               derive the provider snapshot key for an exact scope
-  infra render                             re-derive infra/terraform.tfvars from config
-  infra build-image                        build the AWS deploy MicroVM image and record its pin
-  infra delete-image --yes                 terminate its MicroVMs and delete the AWS deploy image
-  infra delete-task-definitions --yes      delete the stack's AWS ECS task definition revisions
-  conformance [dir] [--static]             run static gates and compare the live resolved layer
-  secrets push [--from <env-file>]         upload the computed secret set to the target store
-  secrets set <KEY> [<value>]              write one .env value in place (dedupes the key, keeps
-     [--from-file <path>]                  order and file mode); reads stdin or prompts when no
-                                           value is given, so the secret never hits shell history
-  status                                   show what's running
-  logs [<service>] [-f] [--tail <n>]       tail service logs (omit <service> for all, interleaved)
-  down [--purge]                           stop the deployment (--purge drops docker volumes)
-  rollback [--to <target>]                 roll back workloads (AWS: prior deployment manifest,
-                                           or manifest id/release label; Fly: sandbox image/tag)
+                                           scaffold direktori deployment (provider base model
+                                           default-nya anthropic; API key-nya wajib jadi secret;
+                                           email sign-in default-nya resend, dan hanya key
+                                           transport terpilih yang di-scaffold)
+  setup [path]                             wizard interaktif: scaffold bila perlu, lalu pandu
+                                           secret yang kurang dengan instruksi per-provider
+  up                                       build image dan nyalakan deployment
+     --build-from[=<qm-repo>]              build dari Dockerfile lokal, bukan pull
+     --dry-run                             resolve config + laporkan rencananya, tanpa mengubah apa pun
+  plan                                     alias untuk up --dry-run
+  check                                    validasi config + sandbox/ (skills & tools); tanpa build;
+                                           verifikasi kredensial provider yang nilainya ada lokal
+    --json                                 hasil machine-readable per klausa contract
+    --live                                 verifikasi identity berjalan, config ter-render, dan health
+  doctor                                   verifikasi prasyarat deployment (read-only)
+  config get <dot.path>                    cetak satu nilai config (skalar mentah, selain itu JSON)
+  slack render                             render manifest bot (+ manifest SSO untuk Slack OIDC)
+  outputs [--json]                         cetak link Web UI, health, dan pembuatan app Slack
+  proof scope-key <scope-id>               turunkan provider snapshot key untuk scope persis
+  infra render                             turunkan ulang infra/terraform.tfvars dari config
+  infra build-image                        build image MicroVM deploy AWS dan catat pin-nya
+  infra delete-image --yes                 hentikan MicroVM-nya dan hapus image deploy AWS
+  infra delete-task-definitions --yes      hapus revisi ECS task definition milik stack
+  conformance [dir] [--static]             jalankan gate statis dan bandingkan layer resolved live
+  secrets push [--from <env-file>]         unggah set secret terkomputasi ke store target
+  secrets set <KEY> [<value>]              tulis satu nilai .env di tempat (dedupe key, jaga
+     [--from-file <path>]                  urutan & mode file); baca stdin atau prompt bila nilai
+                                           tak diberi, jadi secret tak masuk history shell
+  status                                   tampilkan apa yang sedang jalan
+  logs [<service>] [-f] [--tail <n>]       tail log service (kosongkan <service> untuk semua, digabung)
+  down [--purge]                           stop deployment (--purge menghapus docker volume)
+  rollback [--to <target>]                 rollback workload (AWS: manifest deployment sebelumnya,
+                                           atau id manifest/label release; Fly: image/tag sandbox)
   sandbox build [--from <img>] [--tag <t>] [--dry-run]
-                                           build and validate the sandbox image locally
+                                           build dan validasi image sandbox secara lokal
   sandbox publish [--from <img>] [--app <registry/repo>] [--tag <t>] [--dry-run]
-                                           build, push, resolve digest, and record the immutable pin
+                                           build, push, resolve digest, dan catat pin immutable
 
-  ${dim("Options (apply to all deploy commands):")}
-    --config <path>                        path to deploy config (default: qm.config.jsonc in deploy dir)
-    --env-file <path>                      path to .env (default: .env in the deploy dir)
-    --sandbox-dir <path>                   path to the sandbox layer dir (default: sandbox/ in the deploy dir)
+  ${dim("Options (berlaku untuk semua command deploy):")}
+    --config <path>                        path ke config deploy (default: qm.config.jsonc di dir deploy)
+    --env-file <path>                      path ke .env (default: .env di dir deploy)
+    --sandbox-dir <path>                   path ke dir layer sandbox (default: sandbox/ di dir deploy)
 
-${bold("DEVELOP (contributor)")} ${dim("— runs in the QM repo")}
+${bold("DEVELOP (kontributor)")} ${dim("— dijalankan di repo Agent Inovasi")}
   dev up [--org <id>] · dev down · dev status · dev restart · dev canary · dev logs · dev doctor [options]
-                                           run the supervised contributor engine in scripts/dev/
-  dev --ci [up|down]                       CI mode: core only (Slack in-process), no pool lease (live-e2e)
+                                           jalankan engine kontributor tersupervisi di scripts/dev/
+  dev --ci [up|down]                       mode CI: core saja (Slack in-process), tanpa pool lease (live-e2e)
 
   help · version
 
-${dim("target is set in the config: docker runs local containers, fly deploys Fly apps, and aws deploys ECS.")}
-${dim("status/logs/down act on the configured target. Fly uses Fly Machines; AWS uses Lambda MicroVMs.")}
+${dim("target diatur di config: docker menjalankan container lokal, fly deploy ke Fly apps, aws deploy ke ECS.")}
+${dim("status/logs/down bekerja pada target terkonfigurasi. Fly memakai Fly Machines; AWS memakai Lambda MicroVM.")}
 `;
 
 const deploymentBackend = (ctx: DeployContext) => hostingProvider(ctx.target).createBackend(ctx);
