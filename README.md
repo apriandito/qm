@@ -42,7 +42,7 @@ Yang bisa dikerjakan:
 ## Panduan cepat: menjalankan di mesin sendiri
 
 Cara tercepat mencoba Agent Inovasi secara lokal — chat UI, admin, model (DeepSeek),
-Postgres, dan sandbox agent langsung ter-wiring.
+Postgres, dan sandbox agent langsung terhubung.
 
 **Yang perlu disiapkan:** Node ≥ 24.15, Docker, dan sebuah DeepSeek API key.
 
@@ -72,11 +72,10 @@ Menu utama ada di sidebar kiri (**Jelajah**). Berikut fungsi tiap bagian.
 
 ### Chat
 
-Tempat kamu memberi instruksi. Ketik permintaan di kolom **Tanya apa saja**, lalu agent
-mengerjakannya. Model dan harness bisa dipilih di kanan bawah kolom chat. Setiap
-percakapan tersimpan di daftar session, dan bisa dibagikan ke project agar tim ikut melihat.
-
-![Kolom chat Agent Inovasi dengan pilihan model dan harness di kanan bawah](./docs/screenshots/chat.png)
+Tempat kamu memberi instruksi — persis seperti tampilan di bagian atas README. Ketik
+permintaan di kolom **Tanya apa saja**, lalu agent mengerjakannya. Model dan harness bisa
+dipilih di kanan bawah kolom chat. Setiap percakapan tersimpan di daftar session, dan bisa
+dibagikan ke project agar tim ikut melihat.
 
 ### File
 
@@ -147,7 +146,7 @@ npm run coding-check
 ```
 
 Perintah ini memvalidasi bahwa harness dapat melayani model yang dipilih, sandbox punya
-dev tools (git/node/python), dan tool `execute` sudah ter-wiring — tanpa perlu API key.
+dev tools (git/node/python), dan tool `execute` sudah terhubung — tanpa perlu API key.
 
 ## Keamanan
 

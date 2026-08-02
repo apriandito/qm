@@ -1,7 +1,7 @@
 # Quickstart — menjalankan Agent Inovasi secara lokal
 
 Dapatkan instance yang berjalan di mesin kamu sendiri dengan satu perintah. Chat UI,
-admin panel, model (DeepSeek), Postgres, dan sandbox agent semuanya sudah ter-wiring.
+admin panel, model (DeepSeek), Postgres, dan sandbox agent semuanya sudah terhubung.
 
 ## Yang perlu disiapkan
 
@@ -32,8 +32,13 @@ Setelah selesai, kamu akan melihat:
 ```
 ✓ Agent Inovasi is running.
 
-  Chat UI    http://localhost:8096   → sign in as "admin"
-  Admin      http://localhost:8090   → set the admin cookie (see below)
+  Chat UI    http://localhost:8096      → sign in as "admin"
+  Admin      http://localhost:8090      → in the browser console run:
+                                    document.cookie = "admin=admin;path=/"; location.reload()
+
+  Model: DeepSeek · sandbox: local Docker · data: Postgres (container agent-inovasi-postgres)
+
+  Press Ctrl-C to stop. Postgres keeps running; `npm run quickstart:down` removes it.
 ```
 
 ## Cara masuk
