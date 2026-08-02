@@ -4,7 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Agent Inovasi Admin</title>
-    <meta name="brand-self-label" content="Agent" />
+    <meta name="brand-self-label" content="Agent Inovasi" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    />
     <style>
       :root {
         --bg: #fbfbfa;
@@ -42,7 +48,8 @@
         background: var(--bg);
         color: var(--text);
         font:
-          14.5px/1.6 ui-sans-serif,
+          14.5px/1.6 "Plus Jakarta Sans",
+          ui-sans-serif,
           system-ui,
           -apple-system,
           "Segoe UI",
@@ -91,7 +98,7 @@
         height: 23px;
         margin-right: 9px;
         border-radius: 5px;
-        background: var(--brand-accent, #4f46e5);
+        background: var(--brand-accent, #5a4bff);
         color: #fff;
         font-size: 13px;
         font-weight: 650;
@@ -1313,8 +1320,8 @@
         background: color-mix(in srgb, var(--subtle) 58%, var(--surface));
       }
       .file-upload.dragging {
-        border-color: var(--brand-accent, #4f46e5);
-        background: color-mix(in srgb, var(--brand-accent, #4f46e5) 8%, var(--surface));
+        border-color: var(--brand-accent, #5a4bff);
+        background: color-mix(in srgb, var(--brand-accent, #5a4bff) 8%, var(--surface));
       }
       .file-upload-main {
         display: flex;
@@ -3752,7 +3759,7 @@
   </head>
   <body>
     <header>
-      <div class="brand"><span id="brand-product">Agent</span>&nbsp;Admin <span id="org-tag"></span></div>
+      <div class="brand"><span id="brand-product">Agent Inovasi</span>&nbsp;Admin <span id="org-tag"></span></div>
       <div class="header-controls" id="header-controls" aria-label="Page controls"></div>
       <div class="who hidden" id="who">
         <a class="header-button" href="/" id="dashboard-link">Dashboard</a><span class="pill" id="who-name"></span
@@ -3838,8 +3845,8 @@
               <p class="governance-eyebrow">Temporary setup guide</p>
               <h1>Onboarding</h1>
               <p class="lead">
-                Get this Agent Inovasi instance ready for real conversations. Secrets are validated, encrypted in durable storage,
-                and never displayed again.
+                Get this Agent Inovasi instance ready for real conversations. Secrets are validated, encrypted in
+                durable storage, and never displayed again.
               </p>
             </div>
             <div class="setup-grid">
@@ -4338,7 +4345,7 @@
                   </div>
                   <div class="body">
                     <label for="branding-accent">Accent color</label>
-                    <input type="text" id="branding-accent" style="max-width: 200px" placeholder="#4f46e5" />
+                    <input type="text" id="branding-accent" style="max-width: 200px" placeholder="#5a4bff" />
                     <label for="branding-mark" style="margin-top: 12px">Brand mark (1–2 chars)</label>
                     <input type="text" id="branding-mark" style="max-width: 200px" maxlength="2" placeholder="A" />
                     <label for="branding-self-label" style="margin-top: 12px">Assistant label</label>
@@ -4817,7 +4824,7 @@
       let orgId = "acme";
 
       const brandSelfLabel = () =>
-        document.querySelector('meta[name="brand-self-label"]')?.getAttribute("content") || "Agent";
+        document.querySelector('meta[name="brand-self-label"]')?.getAttribute("content") || "Agent Inovasi";
       // The header's product name and the tab title follow the org's assistant label.
       document.getElementById("brand-product").textContent = brandSelfLabel();
       document.title = `${brandSelfLabel()} Admin`;

@@ -79,7 +79,7 @@ function playgroundIntEnv(name: string, fallback: number): number {
 }
 const PLAYGROUND_MINTS_PER_IP = playgroundIntEnv("PORTAL_PLAYGROUND_MINTS_PER_IP", 30);
 const PLAYGROUND_MINT_WINDOW_S = playgroundIntEnv("PORTAL_PLAYGROUND_MINT_WINDOW_S", 3600);
-const NEUTRAL_ACCENT = "#4f46e5";
+const NEUTRAL_ACCENT = "#5a4bff";
 let brandAccent = NEUTRAL_ACCENT;
 let modelProviderConfigured: boolean | undefined;
 let surfaceConfigNextAt = 0;
