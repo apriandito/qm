@@ -1,13 +1,13 @@
-# Quickstart — menjalankan Agent Inovasi secara lokal
+# Quickstart: menjalankan Agent Inovasi secara lokal
 
 Dapatkan instance yang berjalan di mesin kamu sendiri dengan satu perintah. Chat UI,
 admin panel, model (DeepSeek), Postgres, dan sandbox agent semuanya sudah terhubung.
 
 ## Yang perlu disiapkan
 
-- **Node.js ≥ 24.15** — periksa dengan `node --version` (install lewat `nvm install 24`)
-- **Docker** yang berjalan — dipakai untuk sandbox terisolasi milik agent dan untuk Postgres
-- Sebuah **DeepSeek API key** — dari [platform.deepseek.com](https://platform.deepseek.com)
+- **Node.js ≥ 24.15**: periksa dengan `node --version` (install lewat `nvm install 24`)
+- **Docker** yang berjalan, dipakai untuk sandbox terisolasi milik agent dan untuk Postgres
+- Sebuah **DeepSeek API key** dari [platform.deepseek.com](https://platform.deepseek.com)
 
 ## Menjalankan
 
@@ -76,11 +76,11 @@ Semuanya berjalan dengan nilai default. Ubah lewat environment variable bila per
 
 ## Jika ada masalah
 
-- **"needs Node ≥ 24.15"** — upgrade Node (`nvm install 24 && nvm use 24`).
-- **"Docker … not reachable"** — jalankan Docker Desktop atau service docker.
-- **"Could not start Postgres … port already in use"** — set `QUICKSTART_DB_PORT` ke port
+- **"needs Node ≥ 24.15"**: upgrade Node (`nvm install 24 && nvm use 24`).
+- **"Docker … not reachable"**: jalankan Docker Desktop atau service docker.
+- **"Could not start Postgres … port already in use"**: set `QUICKSTART_DB_PORT` ke port
   yang bebas, lalu jalankan ulang.
-- **Build image sandbox gagal** — chat UI tetap terbuka, tetapi agent belum bisa
+- **Build image sandbox gagal**: chat UI tetap terbuka, tetapi agent belum bisa
   menjalankan perintah sampai `npm run sandbox:local:build` berhasil (butuh Docker dan jaringan).
 
 ## Batasan setup lokal

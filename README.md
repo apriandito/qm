@@ -1,6 +1,6 @@
 # Agent Inovasi
 
-Coding & working agent untuk tim Indonesia — di web dan (opsional) di Slack.
+Coding & working agent untuk tim Indonesia, di web dan (opsional) di Slack.
 
 Agent Inovasi mengerjakan tugas nyata: memperbaiki bug dan membuka PR, menjawab dari
 dokumen internal, serta menjalankan pekerjaan rutin secara otomatis. Kamu memberi
@@ -23,26 +23,26 @@ instruksi lewat chat, dan agent yang mengerjakannya.
 ## Apa itu Agent Inovasi
 
 Agent Inovasi adalah agent yang bekerja untuk **tim**. Setiap orang dan setiap ruang
-punya workspace terisolasi sendiri — memory, file, keychain, permission, cron, web app,
-dan sandbox durable — dan tetap bisa berkolaborasi di channel, group, dan project. Semua
+punya workspace terisolasi sendiri (memory, file, keychain, permission, cron, web app,
+dan sandbox durable), dan tetap bisa berkolaborasi di channel, group, dan project. Semua
 aktivitas tercatat untuk audit.
 
 Agent Inovasi bersifat terbuka: kamu memilih sendiri harness dan model yang dipakai. Pi,
 OpenCode, Codex, dan Claude Code menggerakkan core yang sama, sehingga kamu bebas memilih
-model — termasuk **open model** seperti DeepSeek.
+model, termasuk **open model** seperti DeepSeek.
 
 Yang bisa dikerjakan:
 
-- **Mengerjakan kode** — bekerja langsung di repository yang ada: menjalankan test, membuka PR, memonitor CI, membaca log.
-- **Menjawab dari dokumen internal** — notes, email, dokumen, database, dan web sekaligus, lengkap dengan sumber.
-- **Otomasi rutin** — cron & watch yang berjalan tanpa perlu ditunggu (triage inbox, laporan terjadwal).
+- **Mengerjakan kode**: bekerja langsung di repository yang ada, menjalankan test, membuka PR, memonitor CI, membaca log.
+- **Menjawab dari dokumen internal**: notes, email, dokumen, database, dan web sekaligus, lengkap dengan sumber.
+- **Otomasi rutin**: cron & watch yang berjalan tanpa perlu ditunggu (triage inbox, laporan terjadwal).
 - **Membangun & menerbitkan aplikasi internal** ke orang yang tepat.
-- **Mengingat & belajar** — memory berskop, ditambah skills (prosedur yang bisa dipakai ulang dan dibagikan).
+- **Mengingat & belajar**: memory berskop, ditambah skills (prosedur yang bisa dipakai ulang dan dibagikan).
 
 ## Panduan cepat: menjalankan di mesin sendiri
 
-Untuk mencoba Agent Inovasi di mesin sendiri — chat UI, admin, model (DeepSeek),
-Postgres, dan sandbox agent sudah terhubung.
+Coba Agent Inovasi di mesin sendiri. Chat UI, admin, model (DeepSeek), Postgres, dan
+sandbox agent sudah terhubung.
 
 **Yang perlu disiapkan:** Node ≥ 24.15, Docker, dan sebuah DeepSeek API key.
 
@@ -72,7 +72,7 @@ Menu utama ada di sidebar kiri (**Jelajah**). Berikut fungsi tiap bagian.
 
 ### Chat
 
-Tempat kamu memberi instruksi — persis seperti tampilan di bagian atas README. Ketik
+Tempat kamu memberi instruksi, persis seperti tampilan di bagian atas README. Ketik
 permintaan di kolom **Tanya apa saja**, lalu agent mengerjakannya. Model dan harness bisa
 dipilih di kanan bawah kolom chat. Setiap percakapan tersimpan di daftar session, dan bisa
 dibagikan ke project agar tim ikut melihat.
@@ -86,7 +86,7 @@ Kamu bisa menyaring berdasarkan kepemilikan dan tipe, atau meminta agent membuat
 
 ### Cron
 
-Untuk pekerjaan yang berjalan otomatis dan terjadwal — misalnya triage inbox tiap pagi
+Untuk pekerjaan yang berjalan otomatis dan terjadwal, misalnya triage inbox tiap pagi
 atau laporan mingguan. Cron tetap berjalan meski tidak ada yang menunggu.
 
 ![Halaman Cron Agent Inovasi dengan tombol Cron baru](./docs/screenshots/cron.png)
@@ -115,7 +115,7 @@ Klik **Deploy pakai Agent** untuk memulai.
 
 ## Cara pakai sehari-hari
 
-Alurnya sederhana: **buka Chat → tulis permintaan → agent mengerjakan**. Beberapa contoh
+Alurnya sederhana: **buka Chat, tulis permintaan, agent mengerjakan**. Beberapa contoh
 permintaan yang bisa langsung kamu coba:
 
 - "Clone repository ini, jalankan test-nya, lalu perbaiki test yang gagal dan buka PR."
@@ -146,17 +146,17 @@ npm run coding-check
 ```
 
 Perintah ini memvalidasi bahwa harness dapat melayani model yang dipilih, sandbox punya
-dev tools (git/node/python), dan tool `execute` sudah terhubung — tanpa perlu API key.
+dev tools (git/node/python), dan tool `execute` sudah terhubung, tanpa perlu API key.
 
 ## Keamanan
 
-Agent bertindak **sebagai** orang yang diwakilinya — dengan kredensial dan izin mereka —
+Agent bertindak **sebagai** orang yang diwakilinya, dengan kredensial dan izin mereka,
 dan semuanya teraudit. Organisasi memilih satu security posture yang hanya bisa diperketat
 oleh scope yang lebih sempit:
 
-- **Strict** — tiap tool call menunggu persetujuan manusia.
-- **Auto** (default) — classifier menyaring data eksternal berlabel provenance sebelum sampai ke model.
-- **Dangerous** — tanpa penyaringan, tanpa jeda.
+- **Strict**: tiap tool call menunggu persetujuan manusia.
+- **Auto** (default): classifier menyaring data eksternal berlabel provenance sebelum sampai ke model.
+- **Dangerous**: tanpa penyaringan, tanpa jeda.
 
 Command policy (aturan approval dan larangan keras seperti `rm -rf` atau SQL destruktif)
 berlaku di semua posture. Detail model ancaman, asumsi operator, dan batasan yang
@@ -182,14 +182,14 @@ flowchart LR
 
 Setiap turn melewati satu core terpusat yang bisa memakai berbagai model dan harness.
 Postgres menyimpan data pengguna, riwayat sesi, dan state durable lain. Agent punya tool
-surface yang kecil dan tetap; salah satunya `execute` — menjalankan perintah di **sandbox
-Linux terisolasi** milik scope (komputer durable-nya, tempat tools yang di-install tetap
-terpasang). Web UI, admin, dan portal adalah plugin opsional di atas HTTP API core; Slack
-adalah plugin in-process opsional.
+surface yang kecil dan tetap; salah satunya `execute`, yang menjalankan perintah di
+**sandbox Linux terisolasi** milik scope (komputer durable-nya, tempat tools yang
+di-install tetap terpasang). Web UI, admin, dan portal adalah plugin opsional di atas HTTP
+API core; Slack adalah plugin in-process opsional.
 
 Core berjalan langsung di Node (TypeScript) dengan Fastify. Web UI dibangun dengan Vite +
 Lit. Sandbox agent sudah dilengkapi dev tools (git, Node, Python, dll.), jadi agent bisa
-langsung clone → edit → test → commit.
+langsung clone, edit, test, lalu commit.
 
 ## Lisensi
 
