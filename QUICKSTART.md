@@ -1,33 +1,33 @@
-# Quickstart — run Agent Inovasi locally
+# Quickstart — menjalankan Agent Inovasi secara lokal
 
-Get a working instance on your own machine with one command. The chat UI, admin
-panel, model (DeepSeek), Postgres, and the agent's sandbox are all wired for you.
+Dapatkan instance yang berjalan di mesin kamu sendiri dengan satu perintah. Chat UI,
+admin panel, model (DeepSeek), Postgres, dan sandbox agent semuanya sudah ter-wiring.
 
-## Prerequisites
+## Yang perlu disiapkan
 
-- **Node.js ≥ 24.15** — `node --version` (install with `nvm install 24`)
-- **Docker** running — used for the agent's isolated sandbox and for Postgres
-- A **DeepSeek API key** — from [platform.deepseek.com](https://platform.deepseek.com)
+- **Node.js ≥ 24.15** — cek dengan `node --version` (install lewat `nvm install 24`)
+- **Docker** yang berjalan — dipakai untuk sandbox terisolasi milik agent dan untuk Postgres
+- Sebuah **DeepSeek API key** — dari [platform.deepseek.com](https://platform.deepseek.com)
 
-## Run it
+## Menjalankan
 
 ```bash
-git clone <your Agent Inovasi repo>
+git clone <repo Agent Inovasi kamu>
 cd agent-inovasi
 npm install
 npm run quickstart
 ```
 
-The first run asks for your DeepSeek API key (stored locally in `.env.quickstart`,
-which is gitignored), then:
+Saat pertama kali dijalankan, perintah ini menanyakan DeepSeek API key kamu (disimpan
+lokal di `.env.quickstart`, yang sudah gitignored), lalu:
 
-1. Checks Node and Docker
-2. Generates local secrets and starts a Postgres container
-3. Builds the agent sandbox image (one-time, a few minutes) and the web UI
-4. Boots the core, the chat UI, and the admin panel
-5. Prints the URLs
+1. Memeriksa Node dan Docker
+2. Membuat secret lokal dan menjalankan container Postgres
+3. Membangun image sandbox agent (sekali saja, beberapa menit) dan web UI
+4. Menjalankan core, chat UI, dan admin panel
+5. Menampilkan URL
 
-When it finishes you'll see:
+Setelah selesai, kamu akan melihat:
 
 ```
 ✓ Agent Inovasi is running.
@@ -36,54 +36,54 @@ When it finishes you'll see:
   Admin      http://localhost:8090   → set the admin cookie (see below)
 ```
 
-## Signing in
+## Cara masuk
 
-- **Chat UI** (`http://localhost:8096`): open it and sign in with the name `admin`.
-- **Admin panel** (`http://localhost:8090`): open it, then in the browser console run
+- **Chat UI** (`http://localhost:8096`): buka, lalu masuk dengan nama `admin`.
+- **Admin panel** (`http://localhost:8090`): buka, lalu jalankan perintah berikut di console browser
 
   ```js
   document.cookie = "admin=admin;path=/";
   location.reload();
   ```
 
-  (The admin panel normally gets its identity from the sign-in portal, which this
-  local setup skips. `admin` is an org administrator via the generated grant.)
+  (Admin panel biasanya mendapat identitasnya dari sign-in portal, yang di setup lokal
+  ini dilewati. `admin` adalah administrator organisasi lewat grant yang dibuat otomatis.)
 
-## Stopping
+## Menghentikan
 
-- `Ctrl-C` stops the services. Postgres keeps running so your data survives a restart.
-- `npm run quickstart:down` removes the Postgres container (the data volume is kept;
-  `docker volume rm agent-inovasi-pgdata` erases it).
+- `Ctrl-C` menghentikan service. Postgres tetap berjalan supaya data kamu bertahan setelah restart.
+- `npm run quickstart:down` menghapus container Postgres (volume datanya tetap disimpan;
+  `docker volume rm agent-inovasi-pgdata` menghapusnya).
 
-## Configuration
+## Konfigurasi
 
-Everything works with defaults. Override with environment variables if needed:
+Semuanya berjalan dengan nilai default. Ubah lewat environment variable bila perlu:
 
-| Variable                | Default        | Purpose                                     |
-| ----------------------- | -------------- | ------------------------------------------- |
-| `DEEPSEEK_API_KEY`      | _(prompted)_   | Model key; also read from `.env.quickstart` |
-| `QUICKSTART_ORG`        | `agentinovasi` | Organization id                             |
-| `QUICKSTART_PRINCIPAL`  | `admin`        | The local admin user                        |
-| `QUICKSTART_CORE_PORT`  | `8080`         | Core API port                               |
-| `QUICKSTART_WEB_PORT`   | `8096`         | Chat UI port                                |
-| `QUICKSTART_ADMIN_PORT` | `8090`         | Admin panel port                            |
-| `QUICKSTART_DB_PORT`    | `5432`         | Host port for Postgres                      |
+| Variable                | Default        | Kegunaan                                      |
+| ----------------------- | -------------- | --------------------------------------------- |
+| `DEEPSEEK_API_KEY`      | _(ditanyakan)_ | Model key; juga dibaca dari `.env.quickstart` |
+| `QUICKSTART_ORG`        | `agentinovasi` | Id organisasi                                 |
+| `QUICKSTART_PRINCIPAL`  | `admin`        | User admin lokal                              |
+| `QUICKSTART_CORE_PORT`  | `8080`         | Port core API                                 |
+| `QUICKSTART_WEB_PORT`   | `8096`         | Port chat UI                                  |
+| `QUICKSTART_ADMIN_PORT` | `8090`         | Port admin panel                              |
+| `QUICKSTART_DB_PORT`    | `5432`         | Host port untuk Postgres                      |
 
-## Troubleshooting
+## Kalau ada masalah
 
 - **"needs Node ≥ 24.15"** — upgrade Node (`nvm install 24 && nvm use 24`).
-- **"Docker … not reachable"** — start Docker Desktop or the docker service.
-- **"Could not start Postgres … port already in use"** — set `QUICKSTART_DB_PORT` to a
-  free port and rerun.
-- **Sandbox image build failed** — the chat UI still loads, but the agent can't run
-  commands until `npm run sandbox:local:build` succeeds (needs Docker and network).
+- **"Docker … not reachable"** — jalankan Docker Desktop atau service docker.
+- **"Could not start Postgres … port already in use"** — set `QUICKSTART_DB_PORT` ke port
+  yang bebas, lalu jalankan ulang.
+- **Build image sandbox gagal** — chat UI tetap terbuka, tetapi agent belum bisa
+  menjalankan perintah sampai `npm run sandbox:local:build` berhasil (butuh Docker dan jaringan).
 
-## What this is (and isn't)
+## Apa ini (dan apa yang bukan)
 
-This is a single-machine, single-operator setup for trying and self-hosting Agent
-Inovasi. It intentionally skips the production sign-in portal and TLS, which also
-turns off the signed control plane. In this local mode the agent can chat and run
-commands in its sandbox, but the following are **disabled**: scheduled crons and
-reminders, tools that authenticate through OAuth connectors, and publishing web apps.
-Those need the signed deployment. For a public, multi-user deployment with the full
-tool set, use the deployment CLI (`qm init --target fly|aws`) instead.
+Ini adalah setup satu mesin untuk satu operator, untuk mencoba dan self-host Agent
+Inovasi. Setup ini sengaja melewati sign-in portal produksi dan TLS, yang sekaligus
+mematikan signed control plane. Di mode lokal ini agent bisa chat dan menjalankan
+perintah di sandbox-nya, tetapi hal berikut **dinonaktifkan**: cron dan reminder
+terjadwal, tool yang autentikasi lewat OAuth connector, serta publishing web app.
+Semua itu membutuhkan signed deployment. Untuk deployment publik dan multi-user dengan
+tool set lengkap, gunakan deployment CLI (`qm init --target fly|aws`).
