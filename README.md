@@ -1,7 +1,6 @@
 # Agent Inovasi
 
-Agent untuk coding dan pekerjaan sehari-hari bagi tim Indonesia, di web dan (opsional) di
-Slack.
+Agent untuk coding dan pekerjaan sehari-hari, di web dan (opsional) di Slack.
 
 Agent Inovasi bisa memperbaiki bug dan membuka PR, menjawab pertanyaan berdasarkan dokumen
 internal, serta menjalankan pekerjaan rutin secara otomatis. Kamu memberi instruksi lewat
