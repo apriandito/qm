@@ -18,6 +18,10 @@ const VALIDATION_REQUESTS: Record<ModelProvider, { url: string; headers: (apiKey
       url: "https://openrouter.ai/api/v1/key",
       headers: (apiKey) => ({ authorization: `Bearer ${apiKey}` }),
     },
+    deepseek: {
+      url: "https://api.deepseek.com/models",
+      headers: (apiKey) => ({ authorization: `Bearer ${apiKey}` }),
+    },
   };
 
 async function actor(ctx: ApiCtx) {

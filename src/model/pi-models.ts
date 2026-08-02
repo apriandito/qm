@@ -9,7 +9,7 @@ export const THINKING_LEVELS = ["auto", "low", "medium", "high", "xhigh", "max",
 export const HARNESS_IDS = ["pi", "opencode", "codex", "claude", "mock"] as const;
 export type HarnessId = (typeof HARNESS_IDS)[number];
 
-export const MODEL_PROVIDERS = ["anthropic", "openai", "openrouter"] as const;
+export const MODEL_PROVIDERS = ["anthropic", "openai", "openrouter", "deepseek"] as const;
 export type ModelProvider = (typeof MODEL_PROVIDERS)[number];
 
 export function isModelProvider(value: unknown): value is ModelProvider {
@@ -87,6 +87,8 @@ export const MODEL_REGISTRY: readonly ModelEntry[] = [
     clone: { ...GPT_56_CLONE, input: 1, output: 6 },
   },
   { id: "openrouter/auto", name: "OpenRouter Auto", fastMode: false, webui: true, base: true },
+  { id: "deepseek-v4-pro", name: "DeepSeek V4 Pro", fastMode: false, webui: true, base: true },
+  { id: "deepseek-v4-flash", name: "DeepSeek V4 Flash", fastMode: false, webui: true, base: true, auxiliary: true },
   { id: "claude-opus-4-7", name: "Claude Opus 4.7", fastMode: true, webui: false, base: false },
   { id: "claude-opus-4-6", name: "Claude Opus 4.6", fastMode: true, webui: false, base: false },
 ];
@@ -193,6 +195,7 @@ export interface ModelProviderAvailability {
   anthropic: boolean;
   openai: boolean;
   openrouter: boolean;
+  deepseek: boolean;
 }
 
 export function modelServiceable(id: string, providers: ModelProviderAvailability): boolean {
@@ -201,6 +204,7 @@ export function modelServiceable(id: string, providers: ModelProviderAvailabilit
   if (provider === "openai") return providers.openai;
   if (provider === "anthropic") return providers.anthropic;
   if (provider === "openrouter") return providers.openrouter;
+  if (provider === "deepseek") return providers.deepseek;
   return true;
 }
 
@@ -208,7 +212,12 @@ export function serviceableModelIds(ids: readonly string[], providers: ModelProv
   return ids.filter((id) => modelServiceable(id, providers));
 }
 
-export const ALL_PROVIDERS_AVAILABLE: ModelProviderAvailability = { anthropic: true, openai: true, openrouter: true };
+export const ALL_PROVIDERS_AVAILABLE: ModelProviderAvailability = {
+  anthropic: true,
+  openai: true,
+  openrouter: true,
+  deepseek: true,
+};
 
 export function modelProviderAvailabilityFor(
   harness: string,
@@ -216,13 +225,13 @@ export function modelProviderAvailabilityFor(
   managedKeys: ModelProviderAvailability = configKeys,
 ): ModelProviderAvailability {
   if (harness === "pi") return managedKeys;
-  if (harness === "opencode") return { ...configKeys, openrouter: false };
+  if (harness === "opencode") return { ...configKeys, openrouter: false, deepseek: false };
   if (harness === "codex") return configKeys;
   return ALL_PROVIDERS_AVAILABLE;
 }
 
 export function onlyProvider(provider: ModelProvider): ModelProviderAvailability {
-  return { anthropic: false, openai: false, openrouter: false, [provider]: true };
+  return { anthropic: false, openai: false, openrouter: false, deepseek: false, [provider]: true };
 }
 
 export function defaultModelForProvider(harness: string, provider: ModelProvider): string | undefined {

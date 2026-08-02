@@ -38,6 +38,7 @@ function start(
       anthropic: Boolean(config.anthropicApiKey),
       openai: Boolean(config.openaiApiKey),
       openrouter: Boolean(config.openrouterApiKey),
+      deepseek: Boolean(config.deepseekApiKey),
     },
     admin: built.admin,
     auditLog: built.auditLog,
@@ -60,6 +61,7 @@ test("admin model credentials are encrypted, write-only, live, and removable", a
         { provider: "anthropic", configured: true, source: "environment" },
         { provider: "openai", configured: false, source: "absent" },
         { provider: "openrouter", configured: false, source: "absent" },
+        { provider: "deepseek", configured: false, source: "absent" },
       ],
       models: [
         { id: "claude-fable-5", name: "Claude Fable 5", provider: "anthropic" },
@@ -71,6 +73,8 @@ test("admin model credentials are encrypted, write-only, live, and removable", a
         { id: "gpt-5.6-terra", name: "GPT-5.6 Terra", provider: "openai" },
         { id: "gpt-5.6-luna", name: "GPT-5.6 Luna", provider: "openai" },
         { id: "openrouter/auto", name: "OpenRouter Auto", provider: "openrouter" },
+        { id: "deepseek-v4-pro", name: "DeepSeek V4 Pro", provider: "deepseek" },
+        { id: "deepseek-v4-flash", name: "DeepSeek V4 Flash", provider: "deepseek" },
       ],
     });
     const scopeBefore = await fetch(`${srv.base}/v1/admin/scopes/org%3Adefault-org`, { headers: ADMIN });

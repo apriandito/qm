@@ -401,6 +401,7 @@ export function buildApp(
       ...(config.anthropicApiKey ? { anthropic: config.anthropicApiKey } : {}),
       ...(config.openaiApiKey ? { openai: config.openaiApiKey } : {}),
       ...(config.openrouterApiKey ? { openrouter: config.openrouterApiKey } : {}),
+      ...(config.deepseekApiKey ? { deepseek: config.deepseekApiKey } : {}),
     },
   });
   const identity = createIdentityService(artifactMap<DeactivationRecord>("deactivated_principals"));
@@ -682,15 +683,17 @@ export function buildApp(
       : createMemoryRunSignalStore();
   const tasks = config.databaseUrl ? createPostgresTaskStore(config.databaseUrl) : createMemoryTaskStore();
   const resolveModelProviderKeys = async () => {
-    const [anthropic, openai, openrouter] = await Promise.all([
+    const [anthropic, openai, openrouter, deepseek] = await Promise.all([
       modelCredentials.resolve("anthropic"),
       modelCredentials.resolve("openai"),
       modelCredentials.resolve("openrouter"),
+      modelCredentials.resolve("deepseek"),
     ]);
     return {
       ...(anthropic ? { anthropic } : {}),
       ...(openai ? { openai } : {}),
       ...(openrouter ? { openrouter } : {}),
+      ...(deepseek ? { deepseek } : {}),
     };
   };
   const runtimeOrgScope = scopeId("org", config.orgId);

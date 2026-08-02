@@ -85,6 +85,7 @@ export interface PiHarnessOptions {
   apiKey?: string;
   openaiApiKey?: string;
   openrouterApiKey?: string;
+  deepseekApiKey?: string;
   resolveProviderKeys?: () => Promise<ProviderKeys>;
   tempDirPrefix?: string;
   captureRequests?: boolean;
@@ -110,6 +111,7 @@ export function piHarnessConfigOptions(config: Config): PiHarnessOptions {
     ...(config.anthropicApiKey ? { apiKey: config.anthropicApiKey } : {}),
     ...(config.openaiApiKey ? { openaiApiKey: config.openaiApiKey } : {}),
     ...(config.openrouterApiKey ? { openrouterApiKey: config.openrouterApiKey } : {}),
+    ...(config.deepseekApiKey ? { deepseekApiKey: config.deepseekApiKey } : {}),
     captureRequests: config.piCaptureRequests,
     systemCacheSplit: config.piSystemCacheSplit,
     ...coreToolOptions(config),
@@ -975,6 +977,7 @@ export interface ProviderKeys {
   anthropic?: string;
   openai?: string;
   openrouter?: string;
+  deepseek?: string;
 }
 
 async function buildModelRuntime(keys: ProviderKeys | string): Promise<ModelRuntime> {
@@ -986,6 +989,7 @@ async function buildModelRuntime(keys: ProviderKeys | string): Promise<ModelRunt
   if (k.anthropic) await runtime.setRuntimeApiKey("anthropic", k.anthropic, { allowNetwork: false });
   if (k.openai) await runtime.setRuntimeApiKey("openai", k.openai, { allowNetwork: false });
   if (k.openrouter) await runtime.setRuntimeApiKey("openrouter", k.openrouter, { allowNetwork: false });
+  if (k.deepseek) await runtime.setRuntimeApiKey("deepseek", k.deepseek, { allowNetwork: false });
   return runtime;
 }
 
@@ -1203,6 +1207,7 @@ export function createPiHarness(opts?: PiHarnessOptions): Harness {
         ...(opts?.apiKey ? { anthropic: opts.apiKey } : {}),
         ...(opts?.openaiApiKey ? { openai: opts.openaiApiKey } : {}),
         ...(opts?.openrouterApiKey ? { openrouter: opts.openrouterApiKey } : {}),
+        ...(opts?.deepseekApiKey ? { deepseek: opts.deepseekApiKey } : {}),
       };
   const resolveProviderKeys = async (): Promise<ProviderKeys> => ({
     ...configuredProviderKeys,
