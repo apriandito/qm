@@ -23,7 +23,7 @@ chat, lalu agent mengerjakannya.
 
 ## Apa itu Agent Inovasi
 
-Agent Inovasi adalah agent yang bekerja untuk **tim**. Setiap orang dan setiap tim punya
+Agent Inovasi adalah agent yang bekerja untuk tim. Setiap orang dan setiap tim punya
 ruang kerja sendiri yang terpisah (file, ingatan, kunci akses, izin, jadwal otomatis, dan
 aplikasi), tetapi tetap bisa berkolaborasi di channel, group, dan project. Semua aktivitas
 tercatat untuk audit.
@@ -37,8 +37,8 @@ Yang bisa dikerjakan:
 - **Mengerjakan kode**: bekerja langsung di repository yang ada, menjalankan test, membuka PR, memantau CI, membaca log.
 - **Menjawab dari dokumen internal**: catatan, email, dokumen, database, dan web sekaligus, lengkap dengan sumbernya.
 - **Otomasi rutin**: tugas terjadwal yang berjalan otomatis tanpa perlu ditunggu, misalnya merapikan inbox atau membuat laporan berkala.
-- **Membangun & menerbitkan aplikasi internal** ke orang yang tepat.
-- **Mengingat & belajar**: ingatan per ruang kerja, ditambah skills (langkah kerja yang bisa dipakai ulang dan dibagikan).
+- **Membangun dan menerbitkan aplikasi internal** ke orang yang tepat.
+- **Mengingat dan belajar**: ingatan per ruang kerja, ditambah skills (langkah kerja yang bisa dipakai ulang dan dibagikan).
 
 ## Panduan cepat: menjalankan di mesin sendiri
 
@@ -117,8 +117,8 @@ Klik **Deploy pakai Agent** untuk memulai.
 
 ## Cara pakai sehari-hari
 
-Alurnya sederhana: **buka Chat, tulis permintaan, agent mengerjakan**. Beberapa contoh
-permintaan yang bisa langsung kamu coba:
+Alurnya: buka Chat, tulis permintaan, lalu agent mengerjakannya. Beberapa contoh permintaan
+yang bisa langsung kamu coba:
 
 - "Clone repository ini, jalankan test-nya, lalu perbaiki yang gagal dan buka PR."
 - "Rangkum semua email minggu ini dari klien, kelompokkan per topik."
@@ -167,7 +167,7 @@ merusak) berlaku di semua tingkat. Rincian model ancaman dan batasan yang diketa
 
 ## Cara kerja di balik layar
 
-Alurnya sederhana:
+Alurnya:
 
 1. Kamu memberi permintaan lewat **web** atau **Slack**.
 2. Permintaan masuk ke satu **pusat (core)** yang mengatur identitas, izin, dan jadwal.
@@ -181,7 +181,7 @@ Komputer agent (sandbox) sudah berisi alat pengembang seperti git, Node, dan Pyt
 sehingga agent bisa langsung menyalin kode, mengubah, menguji, lalu menyimpannya. Kamu juga
 bebas memilih model dan mesin yang menjalankan agent tanpa mengubah bagian lain.
 
-Secara teknis, semuanya berjalan di Node (TypeScript), jadi mudah dijalankan dan di-deploy.
+Secara teknis, semuanya berjalan di Node (TypeScript).
 
 ## Lisensi
 

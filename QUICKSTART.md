@@ -1,6 +1,6 @@
 # Quickstart: menjalankan Agent Inovasi secara lokal
 
-Dapatkan instance yang berjalan di mesin kamu sendiri dengan satu perintah. Chat UI,
+Jalankan Agent Inovasi di mesin kamu sendiri dengan satu perintah. Chat UI,
 admin panel, model (DeepSeek), Postgres, dan sandbox agent semuanya sudah terhubung.
 
 ## Yang perlu disiapkan
