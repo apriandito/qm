@@ -97,6 +97,18 @@ recursive deletes or destructive SQL — applies in every posture, Dangerous inc
 [`SECURITY.md`](./SECURITY.md) has the threat model, the operator assumptions, and the
 known limitations.
 
+## Run it locally
+
+To try Agent Inovasi on your own machine in one command — chat UI, admin, DeepSeek,
+Postgres, and the agent sandbox all wired up — see [`QUICKSTART.md`](./QUICKSTART.md):
+
+```bash
+npm install
+npm run quickstart
+```
+
+Requires Node ≥ 24.15, Docker, and a DeepSeek API key.
+
 ## Deploy it for your org
 
 Create an organization-owned deployment repository that depends on `@yc-software/qm`:

@@ -11,6 +11,8 @@
   },
   "scripts": {
     "start": "node --env-file-if-exists=.env src/index.ts",
+    "quickstart": "node scripts/quickstart.ts",
+    "quickstart:down": "node scripts/quickstart.ts down",
     "dev": "SHUTDOWN_DRAIN_MS=2000 node --env-file-if-exists=.env --watch src/index.ts",
     "dev-instance": "bash scripts/dev-instance.sh up",
     "dev-instance:status": "bash scripts/dev-instance.sh status",
