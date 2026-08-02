@@ -251,30 +251,30 @@ test("recencyGroup buckets by calendar day, then widening spans", () => {
   const now = new Date(2026, 6, 14, 15, 30).getTime();
   const day = 86_400_000;
   const midnight = new Date(2026, 6, 14, 0, 0).getTime();
-  assert.equal(recencyGroup(now, now), "Today");
-  assert.equal(recencyGroup(midnight, now), "Today", "first instant of today");
-  assert.equal(recencyGroup(midnight - 1, now), "Yesterday", "last instant of yesterday");
-  assert.equal(recencyGroup(midnight - day, now), "Yesterday");
-  assert.equal(recencyGroup(midnight - day - 1, now), "Previous 7 days");
-  assert.equal(recencyGroup(midnight - 6 * day, now), "Previous 7 days", "6 days back is still in the window");
-  assert.equal(recencyGroup(midnight - 6 * day - 1, now), "Previous 30 days");
-  assert.equal(recencyGroup(midnight - 29 * day, now), "Previous 30 days");
-  assert.equal(recencyGroup(midnight - 29 * day - 1, now), "Older");
+  assert.equal(recencyGroup(now, now), "Hari ini");
+  assert.equal(recencyGroup(midnight, now), "Hari ini", "first instant of today");
+  assert.equal(recencyGroup(midnight - 1, now), "Kemarin", "last instant of yesterday");
+  assert.equal(recencyGroup(midnight - day, now), "Kemarin");
+  assert.equal(recencyGroup(midnight - day - 1, now), "7 hari terakhir");
+  assert.equal(recencyGroup(midnight - 6 * day, now), "7 hari terakhir", "6 days back is still in the window");
+  assert.equal(recencyGroup(midnight - 6 * day - 1, now), "30 hari terakhir");
+  assert.equal(recencyGroup(midnight - 29 * day, now), "30 hari terakhir");
+  assert.equal(recencyGroup(midnight - 29 * day - 1, now), "Lebih lama");
 });
 
 test("recencyGroup anchors boundaries to calendar days, not fixed 24h offsets", () => {
   const now = new Date(2026, 6, 14, 15, 30).getTime();
-  assert.equal(recencyGroup(new Date(2026, 6, 13, 23, 59, 59).getTime(), now), "Yesterday");
-  assert.equal(recencyGroup(new Date(2026, 6, 13, 0, 0).getTime(), now), "Yesterday");
-  assert.equal(recencyGroup(new Date(2026, 6, 8, 0, 0).getTime(), now), "Previous 7 days");
-  assert.equal(recencyGroup(new Date(2026, 6, 7, 23, 59, 59).getTime(), now), "Previous 30 days");
-  assert.equal(recencyGroup(new Date(2026, 5, 15, 0, 0).getTime(), now), "Previous 30 days");
-  assert.equal(recencyGroup(new Date(2026, 5, 14, 23, 59, 59).getTime(), now), "Older");
+  assert.equal(recencyGroup(new Date(2026, 6, 13, 23, 59, 59).getTime(), now), "Kemarin");
+  assert.equal(recencyGroup(new Date(2026, 6, 13, 0, 0).getTime(), now), "Kemarin");
+  assert.equal(recencyGroup(new Date(2026, 6, 8, 0, 0).getTime(), now), "7 hari terakhir");
+  assert.equal(recencyGroup(new Date(2026, 6, 7, 23, 59, 59).getTime(), now), "30 hari terakhir");
+  assert.equal(recencyGroup(new Date(2026, 5, 15, 0, 0).getTime(), now), "30 hari terakhir");
+  assert.equal(recencyGroup(new Date(2026, 5, 14, 23, 59, 59).getTime(), now), "Lebih lama");
 });
 
 test("recencyGroup treats a future timestamp (optimistic bump) as Today", () => {
   const now = new Date(2026, 6, 14, 15, 30).getTime();
-  assert.equal(recencyGroup(now + 60_000, now), "Today");
+  assert.equal(recencyGroup(now + 60_000, now), "Hari ini");
 });
 
 test("reconcile replaces an optimistic working stamp with server truth", () => {
@@ -363,15 +363,15 @@ test("rowIndicators: awaitingInput maps through", () => {
 });
 
 test("backgroundLabel: jobs and watches fold into one chip with a spoken label", () => {
-  assert.deepEqual(backgroundLabel(1, 0), { count: 1, label: "1 background job running" });
-  assert.deepEqual(backgroundLabel(2, 1), { count: 3, label: "2 background jobs running · 1 watch armed" });
-  assert.deepEqual(backgroundLabel(0, 2), { count: 2, label: "2 watches armed" });
+  assert.deepEqual(backgroundLabel(1, 0), { count: 1, label: "1 background job berjalan" });
+  assert.deepEqual(backgroundLabel(2, 1), { count: 3, label: "2 background jobs berjalan · 1 watch aktif" });
+  assert.deepEqual(backgroundLabel(0, 2), { count: 2, label: "2 watches aktif" });
   assert.equal(backgroundLabel(0, 0), null, "nothing running, nothing to say");
 });
 
 test("rowIndicators: background counts flow through backgroundLabel — zero counts treated as absent", () => {
   const both = rowIndicators({ ...saved("1", "web:u:x"), backgroundJobs: 2, watches: 1 }, null);
-  assert.deepEqual(both.background, { count: 3, label: "2 background jobs running · 1 watch armed" });
+  assert.deepEqual(both.background, { count: 3, label: "2 background jobs berjalan · 1 watch aktif" });
   assert.equal(rowIndicators({ ...saved("1", "web:u:x"), backgroundJobs: 0, watches: 0 }, null).background, null);
   assert.equal(rowIndicators(saved("1", "web:u:x"), null).background, null);
 });
@@ -380,13 +380,13 @@ test("conversationBackground: resolves the mounted conversation by session id", 
   const list = [saved("1", "web:u:a"), { ...saved("2", "web:u:b"), backgroundJobs: 2, watches: 1 }];
   assert.deepEqual(conversationBackground(list, "2", null), {
     count: 3,
-    label: "2 background jobs running · 1 watch armed",
+    label: "2 background jobs berjalan · 1 watch aktif",
   });
 });
 
 test("conversationBackground: falls back to threadRef while the conversation is still pending adoption", () => {
   const list = [{ ...saved("1", "web:u:a"), watches: 1 }];
-  assert.deepEqual(conversationBackground(list, null, "web:u:a"), { count: 1, label: "1 watch armed" });
+  assert.deepEqual(conversationBackground(list, null, "web:u:a"), { count: 1, label: "1 watch aktif" });
 });
 
 test("conversationBackground: null when the conversation has nothing running, or isn't in the list", () => {

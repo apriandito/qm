@@ -201,10 +201,10 @@ export function defaultSessionTitle(s: CoreSession): string {
   const project = projectName(s.scopeId);
   if (project) return project;
   const surface = surfaceOf(s);
-  if (surface === "web") return "Web chat";
+  if (surface === "web") return "Chat web";
   if (s.type === "channel") return channelLabel(s) ?? "Channel";
   if (s.type === "group") return groupDmText(s.channelName) ?? s.channelName?.trim() ?? "Group DM";
-  return "Direct message";
+  return "Pesan langsung";
 }
 
 function channelLabel(s: CoreSession): string | null {
@@ -271,7 +271,7 @@ export function renderList(): void {
       ${
         pinned.length
           ? html`
-              <div class="recents-group pinned-head">${icon(Pin, 11)}<span>Pinned</span></div>
+              <div class="recents-group pinned-head">${icon(Pin, 11)}<span>Disematkan</span></div>
               ${repeat(
                 pinned,
                 (session) => session.threadRef,
@@ -286,7 +286,7 @@ export function renderList(): void {
           ? html`
               <button class="archived-toggle ${showArchived ? "open" : ""}" @click=${toggleShowArchived}>
                 ${icon(showArchived ? ChevronDown : ChevronRight, 14)} ${icon(Archive, 14)}
-                <span>Archived</span>
+                <span>Arsip</span>
                 <span class="archived-count">${archived.length}</span>
               </button>
               ${showArchived ? groupedRows(archivedItems) : nothing}
@@ -294,11 +294,11 @@ export function renderList(): void {
           : nothing
       }
       ${sessionsNotice ? html`<div class="empty" style="padding:16px">${sessionsNotice}</div>` : ""}
-      ${sessionsLoading && visible.length === 0 ? html`<div class="empty" style="padding:16px">Loading conversations...</div>` : ""}
+      ${sessionsLoading && visible.length === 0 ? html`<div class="empty" style="padding:16px">Memuat percakapan...</div>` : ""}
       ${
         !sessionsLoading && !sessionsNotice && visible.length === 0
           ? html`<div class="empty" style="padding:16px">
-              ${sessionsState.list.length ? "Slack conversations hidden." : "No conversations yet."}
+              ${sessionsState.list.length ? "Percakapan Slack disembunyikan." : "Belum ada percakapan."}
             </div>`
           : ""
       }
@@ -347,8 +347,8 @@ function recentItem(item: RecentItem): TemplateResult {
                   class="session-menu-btn"
                   data-menu-id=${menuKey}
                   type="button"
-                  title="Project options"
-                  aria-label=${`Options for ${name}`}
+                  title="Opsi project"
+                  aria-label=${`Opsi untuk ${name}`}
                   aria-haspopup="menu"
                   aria-expanded=${menuOpen ? "true" : "false"}
                   @click=${(e: Event) => toggleSessionMenu(e, menuKey)}
@@ -360,8 +360,8 @@ function recentItem(item: RecentItem): TemplateResult {
               <button
                 class="recent-project-new-chat"
                 type="button"
-                aria-label=${`New chat in ${name}`}
-                title=${`New chat in ${name}`}
+                aria-label=${`Chat baru di ${name}`}
+                title=${`Chat baru di ${name}`}
                 @click=${(event: Event) => startProjectChat(event, item.scopeId, item.name)}
               >
                 ${icon(Plus, 14)}
@@ -403,7 +403,7 @@ function projectMenuPopover(item: Extract<RecentItem, { kind: "project" }>): Tem
         role="menuitem"
         @click=${() => openProjectFromMenu(item.scopeId)}
       >
-        ${icon(Folder, 15)}<span>View project</span>
+        ${icon(Folder, 15)}<span>Lihat project</span>
       </button>
       ${
         owned
@@ -413,7 +413,7 @@ function projectMenuPopover(item: Extract<RecentItem, { kind: "project" }>): Tem
               role="menuitem"
               @click=${() => beginRename(projectMenuKey(item.scopeId), item.name ?? "")}
             >
-              ${icon(Pencil, 15)}<span>Rename</span>
+              ${icon(Pencil, 15)}<span>Ganti nama</span>
             </button>`
           : nothing
       }
@@ -429,7 +429,7 @@ function openProjectFromMenu(scopeId: string): void {
 function projectRenameRow(item: Extract<RecentItem, { kind: "project" }>): TemplateResult {
   const menuKey = projectMenuKey(item.scopeId);
   return html`<div class="recent-project-head renaming">
-    ${renameInput(menuKey, "Rename project", () => commitProjectRename(item))}
+    ${renameInput(menuKey, "Ganti nama project", () => commitProjectRename(item))}
   </div>`;
 }
 
@@ -469,10 +469,10 @@ export function drawChatsPage(): void {
     .filter((s) => !q || chatMatches(s, q))
     .sort((a, b) => activityOf(b) - activityOf(a))
     .map((s) => chatPageRow(s));
-  let empty = "No conversations yet — start a new chat.";
-  if (sessionsLoading && sessionsState.list.length === 0) empty = "Loading conversations…";
+  let empty = "Belum ada percakapan — mulai chat baru.";
+  if (sessionsLoading && sessionsState.list.length === 0) empty = "Memuat percakapan…";
   else if (chatsPageScope || q || chatsPageStatus !== "active" || chatsPageSurface !== "all") {
-    empty = "No conversations match.";
+    empty = "Tidak ada percakapan yang cocok.";
   }
   render(
     listPageTpl({
@@ -483,22 +483,22 @@ export function drawChatsPage(): void {
         drawChatsPage();
       },
       onRefresh: () => void renderChatsPage(),
-      action: { label: "New chat", onClick: () => newChat() },
+      action: { label: "Chat baru", onClick: () => newChat() },
       search: {
         value: chatsPageQuery,
-        placeholder: "Search chats…",
+        placeholder: "Cari chat…",
         onInput: (v) => {
           chatsPageQuery = v;
           drawChatsPage();
         },
       },
       filters: html`<div class="chat-filters">
-        <div class="resource-tabs" role="tablist" aria-label="Conversation status">
+        <div class="resource-tabs" role="tablist" aria-label="Status percakapan">
           ${(
             [
-              ["active", "Active"],
-              ["waiting", "Waiting"],
-              ["archived", "Archived"],
+              ["active", "Aktif"],
+              ["waiting", "Menunggu"],
+              ["archived", "Arsip"],
             ] as const
           ).map(
             ([value, label]) =>
@@ -519,7 +519,7 @@ export function drawChatsPage(): void {
           )}
         </div>
         <label class="list-select"
-          ><span>Surface</span
+          ><span>Platform</span
           ><select
             .value=${chatsPageSurface}
             @change=${(e: Event) => {
@@ -527,7 +527,7 @@ export function drawChatsPage(): void {
               drawChatsPage();
             }}
           >
-            <option value="all">All surfaces</option>
+            <option value="all">Semua platform</option>
             <option value="web">Web</option>
             <option value="slack">Slack</option>
           </select></label
@@ -541,7 +541,7 @@ export function drawChatsPage(): void {
 }
 
 function chatMatches(s: CoreSession, q: string): boolean {
-  const context = sharedContextLabel(s.scopeId, s.channelName ?? null) ?? "Personal";
+  const context = sharedContextLabel(s.scopeId, s.channelName ?? null) ?? "Pribadi";
   return [sessionTitle(s), s.channelName ?? "", context].join(" ").toLowerCase().includes(q);
 }
 
@@ -568,9 +568,9 @@ function sessionWorking(s: CoreSession): boolean {
 
 function statusMarks(s: CoreSession): TemplateResult {
   const ind = rowIndicators(s, liveThread());
-  return html`${ind.working ? html`<span class="working-dot" ${ref(syncWorkingPulse)} title="Agent is working" aria-label="Agent is working"></span>` : nothing}${
+  return html`${ind.working ? html`<span class="working-dot" ${ref(syncWorkingPulse)} title="Agent sedang bekerja" aria-label="Agent sedang bekerja"></span>` : nothing}${
     ind.awaiting
-      ? html`<span class="awaiting-dot" title="Waiting for your reply" aria-label="Waiting for your reply"></span>`
+      ? html`<span class="awaiting-dot" title="Menunggu balasan kamu" aria-label="Menunggu balasan kamu"></span>`
       : nothing
   }${
     ind.background
@@ -578,8 +578,8 @@ function statusMarks(s: CoreSession): TemplateResult {
           class="bg-chip"
           role="button"
           tabindex="0"
-          title="${ind.background.label} — click to inspect"
-          aria-label="${ind.background.label} — click to inspect"
+          title="${ind.background.label} — klik untuk lihat"
+          aria-label="${ind.background.label} — klik untuk lihat"
           @click=${(e: Event) => openBackgroundInspector(e, s)}
           @keydown=${(e: KeyboardEvent) => (e.key === "Enter" || e.key === " ") && openBackgroundInspector(e, s)}
           >${icon(Activity, 11)}${ind.background.count}</span
@@ -617,7 +617,7 @@ function chatPageRow(s: CoreSession): TemplateResult {
         <span class="list-row-meta">
           ${scopeChip(s.scopeId, s.channelName ?? null)}
           ${surfaceOf(s) === "slack" ? html`<span class="surface surface-slack">${slackLogo(13)}</span>` : nothing}
-          ${readOnly ? html`<span class="ro-lock" title="Read-only">${icon(Lock, 12)}</span>` : nothing}
+          ${readOnly ? html`<span class="ro-lock" title="Hanya baca">${icon(Lock, 12)}</span>` : nothing}
           <span class="list-row-date">${listWhen(activityOf(s))}</span>
         </span>
       </button>
@@ -627,8 +627,8 @@ function chatPageRow(s: CoreSession): TemplateResult {
               <button
                 class="icon-btn"
                 type="button"
-                title="Copy link"
-                aria-label=${`Copy link to ${sessionTitle(s)}`}
+                title="Salin link"
+                aria-label=${`Salin link ke ${sessionTitle(s)}`}
                 @click=${() => void copyText(sessionLink(location.origin, UI_BASE, s.id))}
               >
                 ${icon(Link, 14)}
@@ -636,8 +636,8 @@ function chatPageRow(s: CoreSession): TemplateResult {
               <button
                 class="icon-btn"
                 type="button"
-                title=${s.pinned ? "Unpin" : "Pin"}
-                aria-label=${`${s.pinned ? "Unpin" : "Pin"} ${sessionTitle(s)}`}
+                title=${s.pinned ? "Lepas sematan" : "Sematkan"}
+                aria-label=${`${s.pinned ? "Lepas sematan" : "Sematkan"} ${sessionTitle(s)}`}
                 @click=${() => {
                   setPinned(s, !s.pinned);
                   drawChatsPage();
@@ -648,8 +648,8 @@ function chatPageRow(s: CoreSession): TemplateResult {
               <button
                 class="icon-btn"
                 type="button"
-                title=${s.archived ? "Unarchive" : "Archive"}
-                aria-label=${`${s.archived ? "Unarchive" : "Archive"} ${sessionTitle(s)}`}
+                title=${s.archived ? "Keluarkan dari arsip" : "Arsipkan"}
+                aria-label=${`${s.archived ? "Keluarkan dari arsip" : "Arsipkan"} ${sessionTitle(s)}`}
                 @click=${() => {
                   setArchived(s, !s.archived);
                   drawChatsPage();
@@ -749,7 +749,7 @@ function sessionRow(s: CoreSession, projectChild = false): TemplateResult {
   const refreshingTitle = saved && refreshingTitleIds.has(s.id);
   const untitledProjectChild = projectChild && !s.title?.trim();
   let title = sessionTitle(s);
-  if (untitledProjectChild) title = surfaceOf(s) === "web" ? "Web chat" : "New chat";
+  if (untitledProjectChild) title = surfaceOf(s) === "web" ? "Chat web" : "Chat baru";
   const readOnly = !isContinuable(s, appState.me?.user ?? "");
   const surface = surfaceOf(s);
   const context = projectChild ? null : rowContext(s);
@@ -764,10 +764,10 @@ function sessionRow(s: CoreSession, projectChild = false): TemplateResult {
     title,
     surface !== "web" ? surface : null,
     context,
-    working ? "agent is working" : null,
-    s.awaitingInput ? "waiting for your reply" : null,
-    readOnly ? "read-only" : null,
-    s.pinned ? "pinned" : null,
+    working ? "agent sedang bekerja" : null,
+    s.awaitingInput ? "menunggu balasan kamu" : null,
+    readOnly ? "hanya baca" : null,
+    s.pinned ? "disematkan" : null,
     relTime(activityOf(s)),
   ]
     .filter(Boolean)
@@ -787,7 +787,7 @@ function sessionRow(s: CoreSession, projectChild = false): TemplateResult {
         @click=${() => openSession(s)}
       >
         <div class="title" aria-live="polite">
-          ${statusMarks(s)}${surfaceGlyph(s)}${readOnly ? html`<span class="ro-lock" title="Read-only">${icon(Lock, 12)}</span>` : nothing}<span
+          ${statusMarks(s)}${surfaceGlyph(s)}${readOnly ? html`<span class="ro-lock" title="Hanya baca">${icon(Lock, 12)}</span>` : nothing}<span
             class="tl"
             >${titleContent}</span
           >${context ? html`<span class="row-context" title=${context}>${context}</span>` : nothing}
@@ -800,7 +800,7 @@ function sessionRow(s: CoreSession, projectChild = false): TemplateResult {
                 class="session-menu-btn"
                 data-menu-id=${s.id}
                 type="button"
-                title="Conversation options"
+                title="Opsi percakapan"
                 aria-haspopup="menu"
                 aria-expanded=${menuOpen ? "true" : "false"}
                 @click=${(e: Event) => toggleSessionMenu(e, s.id)}
@@ -846,13 +846,13 @@ function sessionMenuPopover(s: CoreSession): TemplateResult {
   return html`
     <div class="session-menu-popover" role="menu" ${ref(placeSessionMenu)} @click=${(e: Event) => e.stopPropagation()}>
       <button class="session-menu-option" type="button" role="menuitem" @click=${() => void copySessionLink(s)}>
-        ${icon(Link, 15)}<span>Copy link</span>
+        ${icon(Link, 15)}<span>Salin link</span>
       </button>
       <button class="session-menu-option" type="button" role="menuitem" @click=${() => setPinned(s, !pinned)}>
-        ${pinned ? icon(PinOff, 15) : icon(Pin, 15)}<span>${pinned ? "Unpin" : "Pin"}</span>
+        ${pinned ? icon(PinOff, 15) : icon(Pin, 15)}<span>${pinned ? "Lepas sematan" : "Sematkan"}</span>
       </button>
       <button class="session-menu-option" type="button" role="menuitem" @click=${() => startRename(s)}>
-        ${icon(Pencil, 15)}<span>Rename</span>
+        ${icon(Pencil, 15)}<span>Ganti nama</span>
       </button>
       <button
         class="session-menu-option"
@@ -861,10 +861,12 @@ function sessionMenuPopover(s: CoreSession): TemplateResult {
         ?disabled=${refreshingTitle}
         @click=${() => void refreshSessionTitle(s)}
       >
-        ${icon(RefreshCw, 15)}<span>${refreshingTitle ? "Refreshing title" : "Refresh title"}</span>
+        ${icon(RefreshCw, 15)}<span>${refreshingTitle ? "Memperbarui judul" : "Perbarui judul"}</span>
       </button>
       <button class="session-menu-option" type="button" role="menuitem" @click=${() => setArchived(s, !archived)}>
-        ${archived ? icon(ArchiveRestore, 15) : icon(Archive, 15)}<span>${archived ? "Unarchive" : "Archive"}</span>
+        ${archived ? icon(ArchiveRestore, 15) : icon(Archive, 15)}<span
+          >${archived ? "Keluarkan dari arsip" : "Arsipkan"}</span
+        >
       </button>
       ${sessionColorRow(s)}
     </div>
@@ -877,24 +879,24 @@ function sessionColorRow(s: CoreSession): TemplateResult {
   const current = s.color?.toLowerCase() ?? null;
   const isPreset = SESSION_COLORS.includes(current as (typeof SESSION_COLORS)[number]);
   return html`
-    <div class="session-menu-colors" role="group" aria-label="Row color">
+    <div class="session-menu-colors" role="group" aria-label="Warna baris">
       ${SESSION_COLORS.map(
         (c) => html`
           <button
             class="color-swatch ${current === c ? "selected" : ""}"
             type="button"
             style=${`--swatch:${c}`}
-            title=${`Color row ${c}`}
-            aria-label=${`Color row ${c}`}
+            title=${`Warnai baris ${c}`}
+            aria-label=${`Warnai baris ${c}`}
             aria-pressed=${current === c ? "true" : "false"}
             @click=${() => setColor(s, current === c ? null : c)}
           ></button>
         `,
       )}
-      <label class="color-swatch custom ${current && !isPreset ? "selected" : ""}" title="Custom color (RGB picker)">
+      <label class="color-swatch custom ${current && !isPreset ? "selected" : ""}" title="Warna khusus (pemilih RGB)">
         <input
           type="color"
-          aria-label="Custom row color"
+          aria-label="Warna baris khusus"
           value=${current ?? "#6366f1"}
           @click=${(e: Event) => e.stopPropagation()}
           @input=${(e: InputEvent) => previewColor(s, (e.currentTarget as HTMLInputElement).value)}
@@ -906,8 +908,8 @@ function sessionColorRow(s: CoreSession): TemplateResult {
           ? html`<button
               class="color-swatch clear"
               type="button"
-              title="Clear color"
-              aria-label="Clear row color"
+              title="Hapus warna"
+              aria-label="Hapus warna baris"
               @click=${() => setColor(s, null)}
             >
               ${icon(X, 12)}
@@ -920,7 +922,7 @@ function sessionColorRow(s: CoreSession): TemplateResult {
 
 function renameRow(s: CoreSession): TemplateResult {
   return html`<div class="session-row renaming">
-    ${renameInput(s.id, "Rename conversation", () => commitRename(s))}
+    ${renameInput(s.id, "Ganti nama percakapan", () => commitRename(s))}
   </div>`;
 }
 
@@ -1122,7 +1124,7 @@ export async function refreshSessions(
     return true;
   } catch (e) {
     if (seq !== sessionRefreshSeq) return false;
-    if (!opts.silent) sessionsNotice = errMessage(e, "Failed to load conversations.");
+    if (!opts.silent) sessionsNotice = errMessage(e, "Gagal memuat percakapan.");
     return false;
   } finally {
     if (seq === sessionRefreshSeq) {
@@ -1169,7 +1171,7 @@ export async function openSession(s: CoreSession, entriesPrefetch?: Promise<Tran
   sessionsState.openingKey = null;
 
   if (!entriesRes) {
-    showMainEmpty("Couldn't load this conversation. Check your connection and click it again.");
+    showMainEmpty("Gagal memuat percakapan ini. Cek koneksi kamu lalu klik lagi.");
     renderList();
     return;
   }

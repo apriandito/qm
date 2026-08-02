@@ -432,7 +432,7 @@ export function mountShell(): void {
   if (embedMode) {
     render(
       html`<div class="layout embed-layout">
-        <section class="main" id="main"><div class="empty">Loading…</div></section>
+        <section class="main" id="main"><div class="empty">Memuat…</div></section>
       </div>`,
       appEl as HTMLElement,
     );
@@ -451,14 +451,14 @@ export function mountShell(): void {
     html`
       ${banner ?? nothing}
       <div class="layout ${sidebarOpen ? "" : "sidebar-closed"} ${banner ? "bannered" : ""}">
-        <aside class="sidebar" aria-label="Navigation" @keydown=${onSidebarKeydown}>
+        <aside class="sidebar" aria-label="Navigasi" @keydown=${onSidebarKeydown}>
           <div class="brand">
             <div class="brand-lockup">${brandMark()}<span class="brand-name">${brandName()}</span></div>
             <button
               class="icon-btn subtle sidebar-toggle sidebar-collapse-toggle"
               type="button"
-              title="Hide sidebar"
-              aria-label="Hide sidebar"
+              title="Sembunyikan sidebar"
+              aria-label="Sembunyikan sidebar"
               @click=${toggleSidebar}
             >
               ${icon(PanelLeft, 17)}
@@ -471,27 +471,27 @@ export function mountShell(): void {
               <span class="avatar">${initials(appState.me?.user ?? "?")}</span>
               <span class="user-name">${appState.me?.user ?? ""}</span>
             </div>
-            <a class="icon-btn subtle" href=${ADMIN_HOME_URL} title="Back to admin" aria-label="Back to admin"
+            <a class="icon-btn subtle" href=${ADMIN_HOME_URL} title="Kembali ke admin" aria-label="Kembali ke admin"
               >${icon(ArrowLeft, 17)}</a
             >
             <theme-toggle></theme-toggle>
-            <button class="icon-btn subtle" title="Sign out" aria-label="Sign out" @click=${signOut}>
+            <button class="icon-btn subtle" title="Keluar" aria-label="Keluar" @click=${signOut}>
               ${icon(LogOut, 17)}
             </button>
           </div>
         </aside>
-        <button class="sidebar-scrim" type="button" aria-label="Close sidebar" @click=${toggleSidebar}></button>
+        <button class="sidebar-scrim" type="button" aria-label="Tutup sidebar" @click=${toggleSidebar}></button>
         <div
           class="sidebar-resize-handle"
           role="separator"
           aria-orientation="vertical"
-          aria-label="Resize sidebar"
-          title="Drag to resize · double-click to reset"
+          aria-label="Ubah ukuran sidebar"
+          title="Seret untuk ubah ukuran · klik dua kali untuk reset"
           @pointerdown=${startSidebarResize}
           @dblclick=${resetSidebarWidth}
         ></div>
         <section class="main" id="main" tabindex="-1">
-          <div class="empty">Pick a conversation, or start a new chat.</div>
+          <div class="empty">Pilih percakapan, atau mulai chat baru.</div>
         </section>
       </div>
     `,
@@ -518,7 +518,7 @@ export function renderSidebarTop(): void {
       type="button"
       aria-expanded=${open ? "true" : "false"}
       aria-controls=${id}
-      title=${open ? `Hide ${title}` : `Show ${title}`}
+      title=${open ? `Sembunyikan ${title}` : `Tampilkan ${title}`}
       @click=${toggle}
     >
       <span>${title}</span>
@@ -537,18 +537,18 @@ export function renderSidebarTop(): void {
           if (!addBlankPane()) newChat();
         }}
       >
-        ${icon(ICON.newChat, 17)}<span>${splitState.active ? "New session" : "New chat"}</span>
+        ${icon(ICON.newChat, 17)}<span>${splitState.active ? "Session baru" : "Chat baru"}</span>
       </button>
       <nav class="nav" @click=${onNavClick}>
         ${navGroup(
           "nav-workspace",
-          "Browse",
+          "Jelajah",
           navWorkspaceOpen,
           toggleNavWorkspace,
           html`
-            ${navRow("contexts", ICON.contexts, "Projects")} ${navRow("chats", ICON.chats, "Chats")}
-            ${navRow("files", ICON.files, "Files")} ${navRow("crons", ICON.crons, "Crons")}
-            ${navRow("keychain", ICON.keychain, "Keychain")} ${navRow("deploys", ICON.deploys, "Apps")}
+            ${navRow("contexts", ICON.contexts, "Proyek")} ${navRow("chats", ICON.chats, "Chat")}
+            ${navRow("files", ICON.files, "File")} ${navRow("crons", ICON.crons, "Cron")}
+            ${navRow("keychain", ICON.keychain, "Keychain")} ${navRow("deploys", ICON.deploys, "Aplikasi")}
             ${navRow("memory", ICON.memory, "Memory")} ${navRow("skills", ICON.skills, "Skills")}
           `,
         )}
@@ -557,16 +557,16 @@ export function renderSidebarTop(): void {
         appState.currentView === "chats"
           ? html`
               <div class="section-label recents-label">
-                <span>Sessions</span>
+                <span>Session</span>
                 <button
                   class="web-only-toggle ${sessionsState.webOnly ? "on" : ""}"
                   type="button"
                   role="switch"
                   aria-checked=${sessionsState.webOnly ? "true" : "false"}
-                  title=${sessionsState.webOnly ? "Showing web chats only" : "Hide non-web conversations"}
+                  title=${sessionsState.webOnly ? "Cuma menampilkan chat web" : "Sembunyikan percakapan non-web"}
                   @click=${toggleWebOnly}
                 >
-                  <span>Web only</span><span class="mini-switch"><span class="mini-knob"></span></span>
+                  <span>Web aja</span><span class="mini-switch"><span class="mini-knob"></span></span>
                 </button>
               </div>
             `
@@ -725,7 +725,7 @@ function onSidebarKeydown(event: KeyboardEvent): void {
 }
 
 function updateSidebarToggleLabels(): void {
-  const collapseLabel = sidebarOpen ? "Hide sidebar" : "Show sidebar";
+  const collapseLabel = sidebarOpen ? "Sembunyikan sidebar" : "Tampilkan sidebar";
   (appEl as HTMLElement).querySelectorAll<HTMLButtonElement>(".sidebar-toggle").forEach((btn) => {
     btn.setAttribute("aria-expanded", sidebarOpen ? "true" : "false");
     btn.setAttribute("title", collapseLabel);
@@ -741,7 +741,7 @@ export function renderPane(
   controls: unknown = "",
 ): void {
   if (!appState.mainEl) return;
-  const refreshLabel = `Refresh ${title.toLowerCase()}`;
+  const refreshLabel = `Muat ulang ${title.toLowerCase()}`;
   const host = document.createElement("div");
   host.className = "pane";
   render(
@@ -795,7 +795,7 @@ function openAppEditChat(slug: string): void {
     void openSession(existing);
     return;
   }
-  if (!storedDraft(threadRef)) saveDraft(threadRef, `Update my deployed app "${slug}": `);
+  if (!storedDraft(threadRef)) saveDraft(threadRef, `Update app "${slug}" yang aku deploy: `);
   mountContinuable(threadRef, null, null, []);
   renderList();
 }
@@ -860,7 +860,7 @@ export async function boot(): Promise<void> {
       openAppEditChat(slug);
       return;
     }
-    showMainEmpty("This edit link is missing a valid app name.");
+    showMainEmpty("Link edit ini tidak punya nama aplikasi yang valid.");
     return;
   }
 
@@ -868,7 +868,7 @@ export async function boot(): Promise<void> {
     if (wantedSession) {
       const match = sessionsState.list.find((s) => s.id === wantedSession);
       if (match) await openSession(match, entriesPrefetch ?? undefined);
-      else showMainEmpty("That conversation wasn't found, or you don't have access to it.");
+      else showMainEmpty("Percakapan itu tidak ditemukan, atau kamu tidak punya akses ke sana.");
     } else {
       const scope = params.get("scope");
       const context = scope ? (await ensureContexts()).find((c) => c.scopeId === scope) : undefined;
@@ -894,10 +894,10 @@ export async function boot(): Promise<void> {
       exitSplitIfActive();
       await openSession(match, entriesPrefetch ?? undefined);
     } else if (mountRestoredCanvas()) {
-      canvasToast("That conversation wasn't found, or you don't have access to it.");
+      canvasToast("Percakapan itu tidak ditemukan, atau kamu tidak punya akses ke sana.");
       syncUrlFromState();
     } else {
-      showMainEmpty("That conversation wasn't found, or you don't have access to it.");
+      showMainEmpty("Percakapan itu tidak ditemukan, atau kamu tidak punya akses ke sana.");
       renderList();
     }
   } else if (connectedProvider && sessionsState.list.length) {
