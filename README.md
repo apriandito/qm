@@ -1,10 +1,11 @@
 # Agent Inovasi
 
-Coding & working agent untuk tim Indonesia, di web dan (opsional) di Slack.
+Agent untuk coding dan pekerjaan sehari-hari bagi tim Indonesia, di web dan (opsional) di
+Slack.
 
-Agent Inovasi mengerjakan tugas nyata: memperbaiki bug dan membuka PR, menjawab dari
-dokumen internal, serta menjalankan pekerjaan rutin secara otomatis. Kamu memberi
-instruksi lewat chat, dan agent yang mengerjakannya.
+Agent Inovasi bisa memperbaiki bug dan membuka PR, menjawab pertanyaan berdasarkan dokumen
+internal, serta menjalankan pekerjaan rutin secara otomatis. Kamu memberi instruksi lewat
+chat, lalu agent mengerjakannya.
 
 ![Tampilan chat Agent Inovasi dengan menu di kiri dan kolom chat di kanan](./docs/screenshots/web-ui-hero.png)
 
