@@ -2634,6 +2634,11 @@ body.resizing-sidebar {
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
   font: inherit;
   font-size: 13px;
   padding: 7px 13px;
